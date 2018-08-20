@@ -15,18 +15,17 @@ class XeditServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'xedit');
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
-        $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
 
         $this->mergeConfigFrom(
-            __DIR__.'/config/xedit.php', 'xedit'
+            __DIR__ . '/config/xedit.php', 'xedit'
         );
 
         $this->publishes([
-            __DIR__.'/config/xedit.php' => config_path('xedit.php'),
+            __DIR__ . '/config/xedit.php' => config_path('xedit.php'),
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/resources/xedit' => public_path('vendor/xedit'),
+            __DIR__ . '/resources/xedit' => public_path('vendor/xedit'),
         ], 'xedit');
     }
 

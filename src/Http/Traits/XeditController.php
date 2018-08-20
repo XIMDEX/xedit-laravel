@@ -1,37 +1,16 @@
 <?php
 
-namespace Xedit\Http\Controllers\Api;
+namespace Xedit\Http\Traits;
 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Xedit\Base\Core\Xedit;
 use Xedit\Base\Models\RouterMapper;
-use Xedit\Models\Container;
 use Illuminate\Http\Request;
-use App\Models\SectionStudentFile;
-use Illuminate\Routing\Controller;
 
-class XeditController extends Controller
+trait XeditController
 {
 
-    public $model = SectionStudentFile::class;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
-
-    protected function response($data, $error = null, $statusCode = 200)
-    {
-        return response()->json([
-            'result' => $data,
-            'error' => $error
-        ], $statusCode);
-    }
+    public $xedit_model = null;
 
     /*
      * Display all documents
@@ -39,15 +18,15 @@ class XeditController extends Controller
      * @param int|null $type
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $request)
+    public function recovery(Request $request)
     {
         $type = $request->get('_action', null);
         if ($type != null) {
             $id = str_replace('/get', '', str_replace('xedit/', '', $type));
-            $section = ($this->model)::find($id);
+            $section = ($this->xedit_model)::get('id', $id);
             $result = Xedit::getContentByNode($section);
         } else {
-            $result = 'Failed to get document';
+            throw new NotFoundHttpException('Document not found');
         }
         $routerMapper = new RouterMapper('');
         $routerMapper->setSaveUrl('xedit/save&token=null&id=' . $id);
@@ -75,13 +54,12 @@ class XeditController extends Controller
         ['id' => $id] = $request->all();
         $data = $request->json()->all();
 
-        $id = ($this->model)::find($id)->container_id;
-        $content = $data['nodes']["xe_{$id}"];
+        $container = ($this->xedit_model)::get('id', $id)->getContainer();
+        $content = $data['nodes']["xe_{$container->getId()}"];
         $content = isset($content['content']) ? $content['content'] : '';
 
         try {
-            Container::where('id', $id)
-                ->update(['content' => $content]);
+            $container->saveContent($content);
             $result = [
                 'message' => '',
                 'response' => 'Saved',
