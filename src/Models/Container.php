@@ -40,16 +40,27 @@ class Container extends Model implements IXeditContainer
         return $this->content;
     }
 
+    /** Methods */
+    public static function get($attribute, $condition)
+    {
+        return Container::where($attribute, $condition)->first();
+    }
+
+    public function saveContent($content): bool
+    {
+        return $this->update(['content' => $content]);
+    }
+
     /********************************* Relations *********************************/
 
     public function getLayout(): IXeditLayout
     {
-        return Layout::find($this->layout_id);
+        return Layout::get('id', $this->layout_id);
     }
 
     public function getContainer($condition): IXeditContainer
     {
-        return Container::where('slug', $condition)->first();
+        return Container::get('slug', $condition);
     }
 
 }

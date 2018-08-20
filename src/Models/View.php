@@ -13,4 +13,10 @@ class View extends Xedit implements IXeditView
         return $this->content;
     }
 
+    public static function get($attribute, $condition)
+    {
+        return View::where($attribute, $condition)->first();
+    }
+
+
 }

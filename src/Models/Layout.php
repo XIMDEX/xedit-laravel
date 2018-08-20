@@ -19,9 +19,16 @@ class Layout extends Xedit implements IXeditLayout
         return $this->content;
     }
 
+    /** Methods */
+    public static function get($attribute, $condition)
+    {
+        return Layout::where($attribute, $condition)->first();
+    }
+
+
     /********************************* Relations *********************************/
     public function getComponent($condition): IXeditComponent
     {
-        return Component::where('title', $condition)->first();
+        return Component::get('title', $condition);
     }
 }

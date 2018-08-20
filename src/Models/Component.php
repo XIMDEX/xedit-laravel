@@ -9,15 +9,23 @@ use Xedit\Base\Interfaces\Models\IXeditView;
 class Component extends Xedit implements IXeditComponent
 {
 
+    /** Attributes */
     public function getContent(): string
     {
         return $this->content;
     }
 
-    /********************************* Relations *********************************/
-    public function getView($condition): IXeditView
+    /** Methods */
+    public static function get($attribute, $condition)
     {
-        return View::where('title', $condition)->firstOrFail();
+        return static::where($attribute, $condition)->first();
+    }
+
+    /********************************* Relations *********************************/
+    public function getView(): IXeditView
+    {
+        $content = json_decode($this->getContent(), true);
+        return View::get('title', $content['schema']['view']);
     }
 
 }
