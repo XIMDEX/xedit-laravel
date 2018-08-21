@@ -39,6 +39,6 @@ class Layout extends Xedit implements IXeditLayout
     /********************************* Relations *********************************/
     public function getComponent($condition): IXeditComponent
     {
-        return Component::get('title', $condition);
+        return Component::get(Component::getUniqueName(), $condition);
     }
 }
