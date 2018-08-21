@@ -7,7 +7,7 @@ use Xedit\Base\Core\Xedit;
 use Xedit\Base\Models\RouterMapper;
 use Illuminate\Http\Request;
 
-trait XeditController
+trait XeditTrait
 {
 
     public $xedit_model = null;

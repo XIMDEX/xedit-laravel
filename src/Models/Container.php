@@ -29,6 +29,11 @@ class Container extends Model implements IXeditContainer
         return $this->id;
     }
 
+    public static function getUniqueName(): string
+    {
+        return 'slug';
+    }
+
     public function getTitle(): string
     {
         return $this->getLayout()->getTitle();
@@ -41,7 +46,7 @@ class Container extends Model implements IXeditContainer
     }
 
     /** Methods */
-    public static function get($attribute, $condition)
+    public static function get($attribute, $condition): IXeditContainer
     {
         return Container::where($attribute, $condition)->first();
     }
@@ -60,7 +65,7 @@ class Container extends Model implements IXeditContainer
 
     public function getContainer($condition): IXeditContainer
     {
-        return Container::get('slug', $condition);
+        return Container::get(Container::getUniqueName(), $condition);
     }
 
 }

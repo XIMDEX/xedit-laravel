@@ -10,13 +10,23 @@ class Component extends Xedit implements IXeditComponent
 {
 
     /** Attributes */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public static function getUniqueName(): string
+    {
+        return 'slug';
+    }
+
     public function getContent(): string
     {
         return $this->content;
     }
 
     /** Methods */
-    public static function get($attribute, $condition)
+    public static function get($attribute, $condition): IXeditComponent
     {
         return static::where($attribute, $condition)->first();
     }
@@ -25,7 +35,7 @@ class Component extends Xedit implements IXeditComponent
     public function getView(): IXeditView
     {
         $content = json_decode($this->getContent(), true);
-        return View::get('title', $content['schema']['view']);
+        return View::get(View::getUniqueName(), $content['schema']['view']);
     }
 
 }

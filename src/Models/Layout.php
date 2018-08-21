@@ -9,6 +9,16 @@ use Xedit\Base\Interfaces\Models\IXeditLayout;
 class Layout extends Xedit implements IXeditLayout
 {
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public static function getUniqueName(): string
+    {
+        return 'slug';
+    }
+
     public function getTitle(): string
     {
         return $this->title;
@@ -20,7 +30,7 @@ class Layout extends Xedit implements IXeditLayout
     }
 
     /** Methods */
-    public static function get($attribute, $condition)
+    public static function get($attribute, $condition): IXeditLayout
     {
         return Layout::where($attribute, $condition)->first();
     }
