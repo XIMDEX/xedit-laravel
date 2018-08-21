@@ -29,11 +29,6 @@ class Container extends Model implements IXeditContainer
         return $this->id;
     }
 
-    public static function getUniqueName(): string
-    {
-        return 'slug';
-    }
-
     public function getTitle(): string
     {
         return $this->getLayout()->getTitle();
@@ -46,10 +41,6 @@ class Container extends Model implements IXeditContainer
     }
 
     /** Methods */
-    public static function get($attribute, $condition): IXeditContainer
-    {
-        return Container::where($attribute, $condition)->first();
-    }
 
     public function saveContent($content): bool
     {
@@ -60,12 +51,12 @@ class Container extends Model implements IXeditContainer
 
     public function getLayout(): IXeditLayout
     {
-        return Layout::get('id', $this->layout_id);
+        return Layout::where('id', $this->layout_id)->first();
     }
 
     public function getContainer($condition): IXeditContainer
     {
-        return Container::get(Container::getUniqueName(), $condition);
+        return Container::where('id', $condition)->first();
     }
 
 }

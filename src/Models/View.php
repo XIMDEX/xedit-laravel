@@ -13,20 +13,9 @@ class View extends Xedit implements IXeditView
         return $this->id;
     }
 
-    public static function getUniqueName(): string
-    {
-        return 'slug';
-    }
-
     public function getContent(): string
     {
         return $this->content;
     }
-
-    public static function get($attribute, $condition): IXeditView
-    {
-        return View::where($attribute, $condition)->first();
-    }
-
 
 }

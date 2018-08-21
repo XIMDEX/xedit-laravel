@@ -15,27 +15,18 @@ class Component extends Xedit implements IXeditComponent
         return $this->id;
     }
 
-    public static function getUniqueName(): string
-    {
-        return 'slug';
-    }
-
     public function getContent(): string
     {
         return $this->content;
-    }
-
-    /** Methods */
-    public static function get($attribute, $condition): IXeditComponent
-    {
-        return static::where($attribute, $condition)->first();
     }
 
     /********************************* Relations *********************************/
     public function getView(): IXeditView
     {
         $content = json_decode($this->getContent(), true);
-        return View::get(View::getUniqueName(), $content['schema']['view']);
+        $view = $content['schema']['view'];
+        $slug = starts_with($view, 'view-') ? $view : str_slug("view-{$view}");
+        return View::where('slug', $slug)->first();
     }
 
 }
