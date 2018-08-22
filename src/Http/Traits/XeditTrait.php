@@ -54,7 +54,7 @@ trait XeditTrait
         ['id' => $id] = $request->all();
         $data = $request->json()->all();
 
-        $container = ($this->xedit_model)::get('id', $id)->getContainer();
+        $container = ($this->xedit_model)::get($id)->getContainer();
         $content = $data['nodes']["xe_{$container->getId()}"];
         $content = isset($content['content']) ? $content['content'] : '';
 
