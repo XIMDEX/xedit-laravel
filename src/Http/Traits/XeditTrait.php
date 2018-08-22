@@ -23,7 +23,7 @@ trait XeditTrait
         $type = $request->get('_action', null);
         if ($type != null) {
             $id = str_replace('/get', '', str_replace('xedit/', '', $type));
-            $section = ($this->xedit_model)::get('id', $id);
+            $section = ($this->xedit_model)::get($id);
             $result = Xedit::getContentByNode($section);
         } else {
             throw new NotFoundHttpException('Document not found');
