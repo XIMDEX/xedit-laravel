@@ -90,7 +90,7 @@ module.exports = "data:font/woff2;base64,d09GMgABAAAAAAsIAA0AAAAAEwgAAAq2AAEAAAA
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__("../../../../css-loader/index.js?{\"sourceMap\":false,\"importLoaders\":1}!../../../../postcss-loader/lib/index.js?{\"ident\":\"postcss\",\"sourceMap\":false}!../../../../sass-loader/lib/loader.js?{\"sourceMap\":false,\"precision\":8,\"includePaths\":[\"/Users/atovar/develop/web/ximdex/xedit/src/sass\"]}!../../../../../src/sass/styles.scss");
+var content = __webpack_require__("../../../../css-loader/index.js?{\"sourceMap\":false,\"importLoaders\":1}!../../../../postcss-loader/lib/index.js?{\"ident\":\"postcss\",\"sourceMap\":false}!../../../../sass-loader/lib/loader.js?{\"sourceMap\":false,\"precision\":8,\"includePaths\":[\"/media/disco_500g/projects/angular-jenkins/xedit/src/sass\"]}!../../../../../src/sass/styles.scss");
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__("../../../../style-loader/addStyles.js")(content, {});
@@ -176,7 +176,7 @@ exports.push([module.i, ".node-menu {\n  position: relative;\n  width: 150px;\n}
 
 /***/ }),
 
-/***/ "../../../../css-loader/index.js?{\"sourceMap\":false,\"importLoaders\":1}!../../../../postcss-loader/lib/index.js?{\"ident\":\"postcss\",\"sourceMap\":false}!../../../../sass-loader/lib/loader.js?{\"sourceMap\":false,\"precision\":8,\"includePaths\":[\"/Users/atovar/develop/web/ximdex/xedit/src/sass\"]}!../../../../../src/sass/styles.scss":
+/***/ "../../../../css-loader/index.js?{\"sourceMap\":false,\"importLoaders\":1}!../../../../postcss-loader/lib/index.js?{\"ident\":\"postcss\",\"sourceMap\":false}!../../../../sass-loader/lib/loader.js?{\"sourceMap\":false,\"precision\":8,\"includePaths\":[\"/media/disco_500g/projects/angular-jenkins/xedit/src/sass\"]}!../../../../../src/sass/styles.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);

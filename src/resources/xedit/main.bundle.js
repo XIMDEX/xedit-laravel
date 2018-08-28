@@ -22,77 +22,69 @@ webpackEmptyAsyncContext.id = "../../../../../src/$$_lazy_route_resource lazy re
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Api; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_xedit__ = __webpack_require__("../../../../../src/app/xedit.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_api__ = __webpack_require__("../../../../../src/app/core/api.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 
 
 var Api = (function () {
     function Api() {
     }
-    /** Paths **/
-    Api.pathGetNode = function ($nodeId) {
-        return Api.getBaseQuery() + ($nodeId + "/get");
+    /****************** API ENDPOINTS ******************/
+    Api.getMapperUrl = function () {
+        return 'documents.mapper';
     };
-    /** Paramas **/
-    Api.addParams = function (url, params) {
-        for (var key in params) {
-            url = url.replace(":" + key, params[key]);
-        }
-        return url;
+    Api.getDocumentUrl = function () {
+        return 'documents.get';
+    };
+    Api.getSaveUrl = function () {
+        return 'documents.save';
+    };
+    Api.getResourceUrl = function () {
+        return 'resources.image';
+    };
+    Api.getTreeUrl = function () {
+        return 'resources.tree';
+    };
+    Api.getInfoNodeUrl = function () {
+        return 'resources.get';
     };
     /****************** API METHODS ******************/
-    Api.getDocument = function (http, nodeId, successCallback, errorCallback) {
-        var headers = new __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["c" /* HttpHeaders */]()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-            .set('Authorization', "Basic " + btoa(__WEBPACK_IMPORTED_MODULE_1__app_xedit__["a" /* Xedit */].getToken() + ':'));
-        return http
-            .get(this.pathGetNode(nodeId), { headers: headers })
-            .subscribe(function (result) {
-            successCallback(result);
-        }, function (error) {
-            errorCallback();
+    Api.getMapper = function (http, url, params, successCallback, errorCallback) {
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({
+            'Content-Type': 'application/x-www-form-urlencoded'
         });
+        return __WEBPACK_IMPORTED_MODULE_0__core_api__["a" /* default */].request(http, url, params, {}, headers, successCallback, errorCallback);
+    };
+    Api.getDocument = function (http, id, successCallback, errorCallback) {
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({
+            'Content-Type': 'application/x-www-form-urlencoded'
+        });
+        return __WEBPACK_IMPORTED_MODULE_0__core_api__["a" /* default */].request(http, this.getDocumentUrl(), { id: id }, {}, headers, successCallback, errorCallback);
     };
     Api.saveDocument = function (http, document, successCallback, errorCallback) {
-        var json = JSON.stringify(document);
-        var headers = new __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["c" /* HttpHeaders */]()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-            .set('Authorization', "Basic " + btoa(__WEBPACK_IMPORTED_MODULE_1__app_xedit__["a" /* Xedit */].getToken() + ':'));
-        http.post(__WEBPACK_IMPORTED_MODULE_1__app_xedit__["a" /* Xedit */].getSetUrl(), json, { headers: headers }).subscribe(function (data) {
-            successCallback(data);
-        }, function (error) {
-            errorCallback();
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({
+            'Content-Type': 'application/x-www-form-urlencoded'
         });
+        return __WEBPACK_IMPORTED_MODULE_0__core_api__["a" /* default */].request(http, this.getSaveUrl(), {}, document, headers, successCallback, errorCallback, {}, 'post');
     };
-    Api.getTreeChildren = function (http, nodeId, type, successCallback, errorCallback) {
-        var headers = new __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["c" /* HttpHeaders */]()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-            .set('Authorization', "Basic " + btoa(__WEBPACK_IMPORTED_MODULE_1__app_xedit__["a" /* Xedit */].getToken() + ':'));
-        var url = __WEBPACK_IMPORTED_MODULE_1__app_xedit__["a" /* Xedit */].getTreeUrl();
-        url = this.addParams(url, { id: nodeId, type: type });
-        return http.get(url, { headers: headers }).subscribe(function (result) {
-            successCallback(result);
-        }, function (error) {
-            errorCallback();
+    Api.getTreeChildren = function (http, nodeId, type, successCallback, errorCallback, extra) {
+        if (extra === void 0) { extra = {}; }
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({
+            'Content-Type': 'application/x-www-form-urlencoded'
         });
+        return __WEBPACK_IMPORTED_MODULE_0__core_api__["a" /* default */].request(http, this.getTreeUrl(), { id: nodeId }, null, headers, successCallback, errorCallback, extra);
     };
     Api.getInfoNode = function (http, nodeId, type, successCallback, errorCallback, extra) {
-        var headers = new __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["c" /* HttpHeaders */]()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-            .set('Authorization', "Basic " + btoa(__WEBPACK_IMPORTED_MODULE_1__app_xedit__["a" /* Xedit */].getToken() + ':'));
-        var url = __WEBPACK_IMPORTED_MODULE_1__app_xedit__["a" /* Xedit */].getInfoNodeUrl();
-        url = this.addParams(url, { id: nodeId, type: type });
-        return http.get(url, { headers: headers }).subscribe(function (result) {
-            successCallback(result.response, extra);
-        }, function (error) {
-            errorCallback(null, extra);
+        if (extra === void 0) { extra = {}; }
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({
+            'Content-Type': 'application/x-www-form-urlencoded'
         });
+        var endpoint = nodeId;
+        if (!nodeId.startsWith('http')) {
+            endpoint = this.getInfoNodeUrl();
+        }
+        return __WEBPACK_IMPORTED_MODULE_0__core_api__["a" /* default */].request(http, endpoint, { id: nodeId, type: type }, null, headers, successCallback, errorCallback, extra);
     };
-    /****************** AUX METHODS ******************/
-    Api.getBaseQuery = function () {
-        return __WEBPACK_IMPORTED_MODULE_1__app_xedit__["a" /* Xedit */].getApiUrl() + Api.action;
-    };
-    Api.action = '?_action=xedit/';
     return Api;
 }());
 
@@ -165,12 +157,12 @@ module.exports = module.exports.toString();
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ramda__ = __webpack_require__("../../../../ramda/es/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_editor_service_editor_service__ = __webpack_require__("../../../../../src/app/services/editor-service/editor.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_state_service_state_service__ = __webpack_require__("../../../../../src/app/services/state-service/state.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_xedit__ = __webpack_require__("../../../../../src/app/xedit.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_mappers_xedit__ = __webpack_require__("../../../../../src/app/core/mappers/xedit.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_editor_service_editor_service__ = __webpack_require__("../../../../../src/app/services/editor-service/editor.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_state_service_state_service__ = __webpack_require__("../../../../../src/app/services/state-service/state.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_api__ = __webpack_require__("../../../../../src/app/api.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -203,59 +195,96 @@ var AppComponent = (function () {
         this.loadingSuscribe = this._editorService.isLoading().subscribe(function (loading) {
             _this.loading = loading;
         });
-        this.route.queryParams.skip(1).subscribe(function (params) {
-            if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(params.token)) {
-                console.error('SOLICITAR LOGIN');
-            }
-            else if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(params.url)) {
-                console.error('API NO DISPINIBLE');
+        if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])(__WEBPACK_IMPORTED_MODULE_1__core_mappers_xedit__["a" /* Xedit */].BASE, window)) {
+            // TODO Validate $xedit object
+            if (!Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(__WEBPACK_IMPORTED_MODULE_1__core_mappers_xedit__["a" /* Xedit */].getData()) && __WEBPACK_IMPORTED_MODULE_1__core_mappers_xedit__["a" /* Xedit */].getData() !== '') {
+                this.setDocument(__WEBPACK_IMPORTED_MODULE_1__core_mappers_xedit__["a" /* Xedit */].getData());
             }
             else {
-                __WEBPACK_IMPORTED_MODULE_6__app_xedit__["a" /* Xedit */].setToken(params.token);
-                __WEBPACK_IMPORTED_MODULE_6__app_xedit__["a" /* Xedit */].setApiUrl(params.url);
-                _this.getDocument(params);
+                this.getDocument(__WEBPACK_IMPORTED_MODULE_1__core_mappers_xedit__["a" /* Xedit */].getDocument().id, Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('view', __WEBPACK_IMPORTED_MODULE_1__core_mappers_xedit__["a" /* Xedit */].getDocument()) ? __WEBPACK_IMPORTED_MODULE_1__core_mappers_xedit__["a" /* Xedit */].getDocument().view : null);
             }
-        });
+        }
+        else {
+            this.route.queryParams.skip(1).subscribe(function (_params) {
+                var params = Object.assign({}, _params);
+                if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(params['token[field]']) || Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(params['token[value]'])) {
+                    console.log('Not authentication');
+                }
+                if (params.url === undefined || Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(params.url)) {
+                    console.error('API NO DISPINIBLE');
+                }
+                else {
+                    _this._editorService.setLoading(true);
+                    var url = params.url;
+                    delete params.url;
+                    var type = Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('type', params) ? params.type : null;
+                    delete params.type;
+                    if (!Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(params['token[field]']) && !Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(params['token[value]'])) {
+                        params[params['token[field]']] = params['token[value]'];
+                    }
+                    delete params['token[field]'];
+                    delete params['token[value]'];
+                    _this.getMapper(url, params, type);
+                }
+            });
+        }
     };
     AppComponent.prototype.ngOnDestroy = function () {
         this.loadingSuscribe.unsubscribe();
     };
     /************************************** Private Methods **************************************/
-    AppComponent.prototype.getDocument = function (params) {
+    AppComponent.prototype.getMapper = function (url, params, view) {
         var _this = this;
-        this._editorService.setLoading(true);
-        if (!Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(params.nodeId)) {
-            var error_1 = function () {
-                console.log('error');
-                _this._editorService.setLoading(false);
-            };
-            var success = function (result) {
-                if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('status', result) && result.status === 0) {
-                    var nodes = result.response;
-                    var view = 'wysiwyg';
-                    _this._editorService.createFile(nodes);
-                    _this._stateService.setAvailableViews(['wysiwyg', 'text']);
-                    if (!Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(params.type) && Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["b" /* contains */])(params.type, ['wysiwyg', 'text'])) {
-                        view = params.type;
-                    }
-                    _this._stateService.setCurrentView(view);
-                }
-                else {
-                    error_1();
-                }
-                _this._editorService.setLoading(false);
-            };
-            return __WEBPACK_IMPORTED_MODULE_7__app_api__["a" /* Api */].getDocument(this.http, params.nodeId, success, error_1);
+        var error = function () {
+            console.log('error');
+            _this._editorService.setLoading(false);
+        };
+        var success = function (result) {
+            if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('status', result) && result.status === 0) {
+                window['$xedit'] = result.response;
+                _this.getDocument(params.id, view);
+            }
+            else {
+                error();
+            }
+            _this._editorService.setLoading(false);
+        };
+        return __WEBPACK_IMPORTED_MODULE_7__app_api__["a" /* Api */].getMapper(this.http, url, params, success, error);
+    };
+    AppComponent.prototype.getDocument = function (id, view) {
+        var _this = this;
+        var error = function () {
+            console.log('error');
+            _this._editorService.setLoading(false);
+        };
+        var success = function (result) {
+            if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('status', result) && result.status === 0) {
+                _this.setDocument(result.response, view != null ? view : null);
+            }
+            else {
+                error();
+            }
+            _this._editorService.setLoading(false);
+        };
+        return __WEBPACK_IMPORTED_MODULE_7__app_api__["a" /* Api */].getDocument(this.http, id, success, error);
+    };
+    AppComponent.prototype.setDocument = function (nodes, view) {
+        if (view === void 0) { view = null; }
+        if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(view) || !Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["b" /* contains */])(view, ['wysiwyg', 'text'])) {
+            view = 'wysiwyg';
         }
+        this._editorService.createFile(nodes);
+        this._stateService.setAvailableViews(['wysiwyg', 'text']);
+        this._stateService.setCurrentView(view);
     };
     AppComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
+        Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["Component"])({
             selector: 'app-root',
             template: __webpack_require__("../../../../../src/app/app.component.html"),
             styles: [__webpack_require__("../../../../../src/app/app.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__services_editor_service_editor_service__["a" /* EditorService */], __WEBPACK_IMPORTED_MODULE_5__services_state_service_state_service__["a" /* StateService */], __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* ActivatedRoute */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__services_editor_service_editor_service__["a" /* EditorService */], __WEBPACK_IMPORTED_MODULE_6__services_state_service_state_service__["a" /* StateService */], __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HttpClient */],
+            __WEBPACK_IMPORTED_MODULE_4__angular_router__["a" /* ActivatedRoute */]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -427,7 +456,7 @@ var AppModule = (function () {
 /***/ "../../../../../src/app/components/breadcrumb/breadcrumb.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<ul>\n    <ng-container *ngFor=\"let section of breadcrumb; let i = index\">\n        <ng-template [ngIf]=\"(i + 1) < breadcrumb.length\" [ngIfElse]=\"last\">\n            <li (click)=\"changeSelection(section.key)\" (contextmenu)=\"onContextMenu($event, section.target)\">\n                {{ section.name }}\n                <i class=\"fas fa-chevron-right\"></i>\n            </li>\n        </ng-template>\n        <ng-template #last>\n            <li class=\"selected\" (contextmenu)=\"onContextMenu($event, section.target)\">\n                {{ section.name }}\n            </li>\n        </ng-template>\n    </ng-container>\n</ul>\n<context-menu #myContextMenu>\n    <ng-template *ngFor=\"let action of contextMenuActions\" contextMenuItem let-item [visible]=\"action.visible\" [enabled]=\"action.enabled\"\n        [divider]=\"action.divider\" (execute)=\"action.click()\">\n        {{ action.html() }}\n    </ng-template>\n</context-menu>\n<img class=\"logo\" src=\"assets/img/logo_xim.png\" alt=\"Ximdex logo\" />"
+module.exports = "<ul>\n    <ng-container *ngFor=\"let section of breadcrumb; let i = index\">\n        <ng-template [ngIf]=\"(i + 1) < breadcrumb.length\" [ngIfElse]=\"last\">\n            <li (click)=\"changeSelection(section.key)\" (contextmenu)=\"onContextMenu($event, section.target)\">\n                {{ section.name }}\n                <i class=\"fas fa-chevron-right\"></i>\n            </li>\n        </ng-template>\n        <ng-template #last>\n            <li class=\"selected\" (contextmenu)=\"onContextMenu($event, section.target)\">\n                {{ section.name }}\n            </li>\n        </ng-template>\n    </ng-container>\n</ul>\n<context-menu #myContextMenu>\n    <ng-template *ngFor=\"let action of contextMenuActions\" contextMenuItem let-item [visible]=\"action.visible\" [enabled]=\"action.enabled\"\n        [divider]=\"action.divider\" (execute)=\"action.click()\">\n        {{ action.html() }}\n    </ng-template>\n</context-menu>"
 
 /***/ }),
 
@@ -439,7 +468,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 exports.push([module.i, "@import url(https://use.fontawesome.com/releases/v5.0.6/css/all.css);", ""]);
 
 // module
-exports.push([module.i, "/* You can add global styles to this file, and also import other style files */\n/* latin-ext */\n@font-face {\n  font-family: 'Lato';\n  font-style: italic;\n  font-weight: 300;\n  src: local(\"Lato Light Italic\"), local(\"Lato-LightItalic\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u_w4BMUTPHjxsI9w2_FQftx9897sxZ.woff2") + ") format(\"woff2\");\n  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }\n\n/* latin */\n@font-face {\n  font-family: 'Lato';\n  font-style: italic;\n  font-weight: 300;\n  src: local(\"Lato Light Italic\"), local(\"Lato-LightItalic\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u_w4BMUTPHjxsI9w2_Gwftx9897g.woff2") + ") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }\n\n/* latin-ext */\n@font-face {\n  font-family: 'Lato';\n  font-style: italic;\n  font-weight: 400;\n  src: local(\"Lato Italic\"), local(\"Lato-Italic\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u8w4BMUTPHjxsAUi-qNiXg7eU0.woff2") + ") format(\"woff2\");\n  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }\n\n/* latin */\n@font-face {\n  font-family: 'Lato';\n  font-style: italic;\n  font-weight: 400;\n  src: local(\"Lato Italic\"), local(\"Lato-Italic\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u8w4BMUTPHjxsAXC-qNiXg7Q.woff2") + ") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }\n\n/* latin-ext */\n@font-face {\n  font-family: 'Lato';\n  font-style: italic;\n  font-weight: 700;\n  src: local(\"Lato Bold Italic\"), local(\"Lato-BoldItalic\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u_w4BMUTPHjxsI5wq_FQftx9897sxZ.woff2") + ") format(\"woff2\");\n  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }\n\n/* latin */\n@font-face {\n  font-family: 'Lato';\n  font-style: italic;\n  font-weight: 700;\n  src: local(\"Lato Bold Italic\"), local(\"Lato-BoldItalic\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u_w4BMUTPHjxsI5wq_Gwftx9897g.woff2") + ") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }\n\n/* latin-ext */\n@font-face {\n  font-family: 'Lato';\n  font-style: normal;\n  font-weight: 300;\n  src: local(\"Lato Light\"), local(\"Lato-Light\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u9w4BMUTPHh7USSwaPGQ3q5d0N7w.woff2") + ") format(\"woff2\");\n  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }\n\n/* latin */\n@font-face {\n  font-family: 'Lato';\n  font-style: normal;\n  font-weight: 300;\n  src: local(\"Lato Light\"), local(\"Lato-Light\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u9w4BMUTPHh7USSwiPGQ3q5d0.woff2") + ") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }\n\n/* latin-ext */\n@font-face {\n  font-family: 'Lato';\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Lato Regular\"), local(\"Lato-Regular\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6uyw4BMUTPHjxAwXiWtFCfQ7A.woff2") + ") format(\"woff2\");\n  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }\n\n/* latin */\n@font-face {\n  font-family: 'Lato';\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Lato Regular\"), local(\"Lato-Regular\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6uyw4BMUTPHjx4wXiWtFCc.woff2") + ") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }\n\n/* latin-ext */\n@font-face {\n  font-family: 'Lato';\n  font-style: normal;\n  font-weight: 700;\n  src: local(\"Lato Bold\"), local(\"Lato-Bold\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u9w4BMUTPHh6UVSwaPGQ3q5d0N7w.woff2") + ") format(\"woff2\");\n  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }\n\n/* latin */\n@font-face {\n  font-family: 'Lato';\n  font-style: normal;\n  font-weight: 700;\n  src: local(\"Lato Bold\"), local(\"Lato-Bold\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u9w4BMUTPHh6UVSwiPGQ3q5d0.woff2") + ") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }\n\n:host {\n  position: relative;\n  z-index: 5;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: row;\n          flex-direction: row;\n  box-shadow: 0px 3px 11px 0px rgba(0, 0, 0, 0.57);\n  min-height: 30px;\n  max-height: 30px;\n  background-color: #edeff2;\n  font: normal 14px \"Lato\", sans-serif; }\n  :host > ul {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -ms-flex-line-pack: center;\n        align-content: center;\n    list-style: none;\n    padding: 5px 0;\n    margin: 0; }\n    :host > ul > li {\n      margin: auto 5px;\n      text-transform: capitalize;\n      color: #3f4946;\n      transition: color 0.3s ease-in-out; }\n      :host > ul > li > i.fas {\n        color: #3f4946;\n        margin: 0 0 0 5px; }\n      :host > ul > li:not(.selected):hover {\n        cursor: pointer;\n        color: #3a9e8f; }\n      :host > ul > li.selected {\n        color: #3a9e8f; }\n  :host > img.logo {\n    margin: auto 0 auto auto;\n    height: 30px;\n    width: auto; }\n", ""]);
+exports.push([module.i, "/* You can add global styles to this file, and also import other style files */\n/* latin-ext */\n@font-face {\n  font-family: 'Lato';\n  font-style: italic;\n  font-weight: 300;\n  src: local(\"Lato Light Italic\"), local(\"Lato-LightItalic\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u_w4BMUTPHjxsI9w2_FQftx9897sxZ.woff2") + ") format(\"woff2\");\n  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }\n\n/* latin */\n@font-face {\n  font-family: 'Lato';\n  font-style: italic;\n  font-weight: 300;\n  src: local(\"Lato Light Italic\"), local(\"Lato-LightItalic\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u_w4BMUTPHjxsI9w2_Gwftx9897g.woff2") + ") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }\n\n/* latin-ext */\n@font-face {\n  font-family: 'Lato';\n  font-style: italic;\n  font-weight: 400;\n  src: local(\"Lato Italic\"), local(\"Lato-Italic\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u8w4BMUTPHjxsAUi-qNiXg7eU0.woff2") + ") format(\"woff2\");\n  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }\n\n/* latin */\n@font-face {\n  font-family: 'Lato';\n  font-style: italic;\n  font-weight: 400;\n  src: local(\"Lato Italic\"), local(\"Lato-Italic\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u8w4BMUTPHjxsAXC-qNiXg7Q.woff2") + ") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }\n\n/* latin-ext */\n@font-face {\n  font-family: 'Lato';\n  font-style: italic;\n  font-weight: 700;\n  src: local(\"Lato Bold Italic\"), local(\"Lato-BoldItalic\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u_w4BMUTPHjxsI5wq_FQftx9897sxZ.woff2") + ") format(\"woff2\");\n  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }\n\n/* latin */\n@font-face {\n  font-family: 'Lato';\n  font-style: italic;\n  font-weight: 700;\n  src: local(\"Lato Bold Italic\"), local(\"Lato-BoldItalic\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u_w4BMUTPHjxsI5wq_Gwftx9897g.woff2") + ") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }\n\n/* latin-ext */\n@font-face {\n  font-family: 'Lato';\n  font-style: normal;\n  font-weight: 300;\n  src: local(\"Lato Light\"), local(\"Lato-Light\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u9w4BMUTPHh7USSwaPGQ3q5d0N7w.woff2") + ") format(\"woff2\");\n  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }\n\n/* latin */\n@font-face {\n  font-family: 'Lato';\n  font-style: normal;\n  font-weight: 300;\n  src: local(\"Lato Light\"), local(\"Lato-Light\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u9w4BMUTPHh7USSwiPGQ3q5d0.woff2") + ") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }\n\n/* latin-ext */\n@font-face {\n  font-family: 'Lato';\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Lato Regular\"), local(\"Lato-Regular\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6uyw4BMUTPHjxAwXiWtFCfQ7A.woff2") + ") format(\"woff2\");\n  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }\n\n/* latin */\n@font-face {\n  font-family: 'Lato';\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Lato Regular\"), local(\"Lato-Regular\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6uyw4BMUTPHjx4wXiWtFCc.woff2") + ") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }\n\n/* latin-ext */\n@font-face {\n  font-family: 'Lato';\n  font-style: normal;\n  font-weight: 700;\n  src: local(\"Lato Bold\"), local(\"Lato-Bold\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u9w4BMUTPHh6UVSwaPGQ3q5d0N7w.woff2") + ") format(\"woff2\");\n  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }\n\n/* latin */\n@font-face {\n  font-family: 'Lato';\n  font-style: normal;\n  font-weight: 700;\n  src: local(\"Lato Bold\"), local(\"Lato-Bold\"), url(" + __webpack_require__("../../../../../src/sass/fonts/lato/S6u9w4BMUTPHh6UVSwiPGQ3q5d0.woff2") + ") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }\n\n:host {\n  position: relative;\n  z-index: 5;\n  box-shadow: 0px 3px 11px 0px rgba(0, 0, 0, 0.57);\n  min-height: 30px;\n  max-height: 30px;\n  background-color: #edeff2;\n  font: normal 14px \"Lato\", sans-serif; }\n  :host > ul {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -ms-flex-line-pack: center;\n        align-content: center;\n    list-style: none;\n    padding: 5px 0;\n    margin: 0; }\n    :host > ul > li {\n      margin: auto 5px;\n      text-transform: capitalize;\n      color: #3f4946;\n      transition: color 0.3s ease-in-out; }\n      :host > ul > li > i.fas {\n        color: #3f4946;\n        margin: 0 0 0 5px; }\n      :host > ul > li:not(.selected):hover {\n        cursor: pointer;\n        color: #3a9e8f; }\n      :host > ul > li.selected {\n        color: #3a9e8f; }\n", ""]);
 
 // exports
 
@@ -491,8 +520,8 @@ var BreadcrumbComponent = (function () {
         this.contextMenuService = contextMenuService;
         this._notification = _notification;
         this.selectNode = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
-        this.breadcrumb = [];
         this.contextMenuActions = [];
+        this.breadcrumb = [];
     }
     BreadcrumbComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -522,6 +551,7 @@ var BreadcrumbComponent = (function () {
     BreadcrumbComponent.prototype.changeSelection = function (elementKey) {
         this.selectNode.emit(elementKey);
     };
+    /************************************** MENU *****************************************/
     BreadcrumbComponent.prototype.onContextMenu = function ($event, item) {
         var _this = this;
         var node = this._editorService.parseToNode(item);
@@ -831,6 +861,10 @@ var EditorComponent = (function () {
     EditorComponent.prototype.showComponent = function (view) {
         return Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["d" /* equals */])(view, this.currentView);
     };
+    EditorComponent.prototype.saveClipboardConfigs = function (evt) {
+        this.cConfigs = evt;
+        this.clipboardConfigs.setConfigs(evt);
+    };
     /**
      *
      */
@@ -883,10 +917,6 @@ var EditorComponent = (function () {
             .catch((error) => {
               console.error(error)
             })*/
-    };
-    EditorComponent.prototype.saveClipboardConfigs = function (evt) {
-        this.cConfigs = evt;
-        this.clipboardConfigs.setConfigs(evt);
     };
     /**
      *
@@ -1011,7 +1041,7 @@ var PropertiesAreaComponent = (function () {
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_3_angular2_collapsible__["a" /* CollapsibleHeaderComponent */])
     ], PropertiesAreaComponent.prototype, "collapsible", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])('configs'),
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])(),
         __metadata("design:type", Array)
     ], PropertiesAreaComponent.prototype, "configs", void 0);
     __decorate([
@@ -1469,14 +1499,13 @@ var isValidNodeId = function (nodeId) {
     return true;
 };
 function hasValidResource(tag, val, type) {
-    var isValid = VALID_TAGS.includes(tag) && !Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["j" /* isEmpty */])(val) && tag == TAG_BY_TYPE[type];
-    return isValid;
+    return VALID_TAGS.includes(tag) && !Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["j" /* isEmpty */])(val) && tag === TAG_BY_TYPE[type];
 }
 var getId = function (editor, type) {
     var selectedNode = editor.selection.getNode();
     var tag = selectedNode.tagName.toLowerCase();
     var val = editor.dom.getAttrib(selectedNode, __WEBPACK_IMPORTED_MODULE_1__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_LINK);
-    if (type == 'video') {
+    if (type === 'video') {
         tag = 'video';
         val = editor.dom.getAttrib(selectedNode, 'data-mce-p-xe_link');
     }
@@ -1496,6 +1525,9 @@ var getAttribute = function (editor, attribute) {
 var getUrl = function (editor, nodeId) {
     var resourceUrl = editor.getParam('dam_url', editor.documentBaseUrl);
     var url = resourceUrl + nodeId;
+    if (resourceUrl instanceof Function) {
+        url = resourceUrl(nodeId);
+    }
     if (((/^(f|ht)tps?:\/\//i).test(nodeId))) {
         url = nodeId;
     }
@@ -1504,9 +1536,9 @@ var getUrl = function (editor, nodeId) {
 var createHtmlVideo = function (text, resource) {
     var height = 'height' in resource && !Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["j" /* isEmpty */])(resource['height']) ? resource['height'] : '100%';
     var width = 'width' in resource && !Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["j" /* isEmpty */])(resource['width']) ? resource['width'] : '100%';
-    //text = `<video xe_link="${resource['xe_link']}" lingkwidth="${width}" height="${height}" controls>`;
+    // text = `<video xe_link="${resource['xe_link']}" lingkwidth="${width}" height="${height}" controls>`;
     text = "<source src=\"" + resource['xe_link'] + "\" type=\"video/mp4\"/>Your browser does not support the video tag.";
-    //text += `</video>`;
+    // text += `</video>`;
     resource['width'] = "" + width;
     resource['height'] = "" + height;
     resource['controls'] = '';
@@ -1526,8 +1558,8 @@ var insert = function (editor, nodeId, type, attributes) {
         });
     }
     else {
-        //editor.focus();
-        //editor.selection.collapse(true);
+        // editor.focus();
+        // editor.selection.collapse(true);
         var tag_1 = TAG_BY_TYPE[type];
         var resource_1 = {
             xe_link: nodeId
@@ -1537,7 +1569,7 @@ var insert = function (editor, nodeId, type, attributes) {
         });
         resource_1[ATTR_BY_TAG[tag_1]] = url;
         var text = '';
-        if (type == 'link') {
+        if (type === 'link') {
             if (!hasResource) {
                 text = editor.selection.getContent();
             }
@@ -1545,7 +1577,7 @@ var insert = function (editor, nodeId, type, attributes) {
                 text = resource_1['title'];
             }
         }
-        else if (type == 'video') {
+        else if (type === 'video') {
             _a = createHtmlVideo(text, resource_1), text = _a[0], resource_1 = _a[1];
             tag_1 = 'video';
         }
@@ -1744,7 +1776,6 @@ var open = function (editor, http, type) {
             path = Object.values(result.path).join('/');
             path = "<span title=\"" + path + "\">" + path + "<span/>";
         }
-        var pathIds = result && result.path ? Object.keys(result.path) : [];
         document.getElementById('dam-nodeId')['value'] = id;
         document.getElementById('dam-name')['innerHTML'] = name;
         document.getElementById('dam-path')['innerHTML'] = path;
@@ -1811,7 +1842,7 @@ var open = function (editor, http, type) {
         }
         editor.windowManager.open(form);
     }
-    if (currentId) {
+    if (currentId && !(/^(f|ht)tps?:\/\//i).test(currentId)) {
         __WEBPACK_IMPORTED_MODULE_1__app_api__["a" /* Api */].getInfoNode(http, currentId, type, showWManager, showWManager, {
             editor: editor,
         });
@@ -1871,12 +1902,15 @@ var open = function (editor, http, type) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__dam_api_Commands__ = __webpack_require__("../../../../../src/app/components/editor/views/wysiwyg-view/dam/api/Commands.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__dam_core_FilterContent__ = __webpack_require__("../../../../../src/app/components/editor/views/wysiwyg-view/dam/core/FilterContent.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__dam_ui_Buttons__ = __webpack_require__("../../../../../src/app/components/editor/views/wysiwyg-view/dam/ui/Buttons.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_bootstrap_datepicker__ = __webpack_require__("../../../../bootstrap-datepicker/dist/js/bootstrap-datepicker.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_bootstrap_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_21_bootstrap_datepicker__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22_ramda__ = __webpack_require__("../../../../ramda/es/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__models_schema_xedit_mapper__ = __webpack_require__("../../../../../src/app/models/schema/xedit-mapper.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__utils_converters__ = __webpack_require__("../../../../../src/utils/converters.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__app_xedit__ = __webpack_require__("../../../../../src/app/xedit.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_dateformat__ = __webpack_require__("../../../../dateformat/lib/dateformat.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_dateformat___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_21_dateformat__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22_bootstrap_datepicker__ = __webpack_require__("../../../../bootstrap-datepicker/dist/js/bootstrap-datepicker.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22_bootstrap_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_22_bootstrap_datepicker__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23_ramda__ = __webpack_require__("../../../../ramda/es/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__models_schema_xedit_mapper__ = __webpack_require__("../../../../../src/app/models/schema/xedit-mapper.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__utils_converters__ = __webpack_require__("../../../../../src/utils/converters.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__core_mappers_router__ = __webpack_require__("../../../../../src/app/core/mappers/router.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__app_api__ = __webpack_require__("../../../../../src/app/api.ts");
 
 
 
@@ -1899,7 +1933,9 @@ var open = function (editor, http, type) {
 
 
 
+
 // DATEPICKER
+
 
 
 
@@ -1925,17 +1961,19 @@ var WysiwygHandler = (function () {
      */
     WysiwygHandler.initTinymce = function (args) {
         if (tinymce.activeEditor == null ||
-            !WysiwygHandler.isSameEditor(tinymce.activeEditor, args.node.getSection().getAttribute(__WEBPACK_IMPORTED_MODULE_23__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_UUID))) {
+            !WysiwygHandler.isSameEditor(tinymce.activeEditor, args.node.getSection().getAttribute(__WEBPACK_IMPORTED_MODULE_24__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_UUID))) {
             WysiwygHandler.clearTinymce();
             WysiwygHandler.addPlugins(args.http);
             var toolbar_1 = WysiwygHandler.generateToolbar(args.node.getSchema());
-            var fixed_toolbar_container = !Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["j" /* isEmpty */])(toolbar_1)
+            var fixed_toolbar_container = !Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["j" /* isEmpty */])(toolbar_1)
                 ? '#toolbar'
                 : false;
             tinymce.init({
-                dam_url: __WEBPACK_IMPORTED_MODULE_25__app_xedit__["a" /* Xedit */].getResourceUrl(),
+                dam_url: function (id) {
+                    return __WEBPACK_IMPORTED_MODULE_26__core_mappers_router__["a" /* default */].configUrl(__WEBPACK_IMPORTED_MODULE_27__app_api__["a" /* Api */].getResourceUrl(), { id: id });
+                },
                 max_chars: 30000,
-                id: args.node.getSection().getAttribute(__WEBPACK_IMPORTED_MODULE_23__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_UUID),
+                id: args.node.getSection().getAttribute(__WEBPACK_IMPORTED_MODULE_24__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_UUID),
                 target: args.node.getSection(),
                 inline: true,
                 branding: false,
@@ -1952,10 +1990,10 @@ var WysiwygHandler = (function () {
                         var sibling = ele.previousSibling;
                         if (sibling &&
                             typeof sibling.getAttribute === 'function') {
-                            if (sibling.getAttribute(__WEBPACK_IMPORTED_MODULE_23__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_UUID) ==
-                                ele.getAttribute(__WEBPACK_IMPORTED_MODULE_23__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_UUID)) {
-                                ele.setAttribute(__WEBPACK_IMPORTED_MODULE_23__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_UUID, __WEBPACK_IMPORTED_MODULE_1_angular2_uuid__["UUID"].UUID());
-                                sibling.removeAttribute(__WEBPACK_IMPORTED_MODULE_23__models_schema_xedit_mapper__["a" /* XeditMapper */].ATTR_WYSIWYG_SELECTED);
+                            if (sibling.getAttribute(__WEBPACK_IMPORTED_MODULE_24__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_UUID) ===
+                                ele.getAttribute(__WEBPACK_IMPORTED_MODULE_24__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_UUID)) {
+                                ele.setAttribute(__WEBPACK_IMPORTED_MODULE_24__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_UUID, __WEBPACK_IMPORTED_MODULE_1_angular2_uuid__["UUID"].UUID());
+                                sibling.removeAttribute(__WEBPACK_IMPORTED_MODULE_24__models_schema_xedit_mapper__["a" /* XeditMapper */].ATTR_WYSIWYG_SELECTED);
                             }
                         }
                         /*const element = e.element;
@@ -2012,7 +2050,7 @@ var WysiwygHandler = (function () {
                         // TODO FIX atovar
                         var xedit = e.target.bodyElement;
                         var links = xedit.getElementsByTagName('a');
-                        if (!Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["k" /* isNil */])(links)) {
+                        if (!Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["k" /* isNil */])(links)) {
                             for (var i = 0; i < links.length; i++) {
                                 links[i].onclick = function (evt) {
                                     evt.preventDefault();
@@ -2060,11 +2098,11 @@ var WysiwygHandler = (function () {
         for (var i = 0; i < occurrences; i++) {
             text = replaceIndex(text, i, ' xe_uuid="' + __WEBPACK_IMPORTED_MODULE_1_angular2_uuid__["UUID"].UUID() + '" ');
         }
-        return __WEBPACK_IMPORTED_MODULE_24__utils_converters__["a" /* Converters */].json2html(__WEBPACK_IMPORTED_MODULE_24__utils_converters__["a" /* Converters */].html2json(text));
+        return __WEBPACK_IMPORTED_MODULE_25__utils_converters__["a" /* Converters */].json2html(__WEBPACK_IMPORTED_MODULE_25__utils_converters__["a" /* Converters */].html2json(text));
     };
     WysiwygHandler.isSameEditor = function (editor, id) {
         return (editor.targetElm.hasAttribute('xe_uuid') &&
-            Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["d" /* equals */])(editor.targetElm.getAttribute('xe_uuid'), id));
+            Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["d" /* equals */])(editor.targetElm.getAttribute('xe_uuid'), id));
     };
     WysiwygHandler.addPlugins = function (http) {
         tinymce.PluginManager.add('dam', function (editor) {
@@ -2079,16 +2117,16 @@ var WysiwygHandler = (function () {
         /*'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify
         | numlist bullist outdent indent  | removeformat'*/
         var toolbar = '';
-        if (Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["g" /* hasIn */])('options', schema)) {
-            if (Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["g" /* hasIn */])('styles', schema.options)) {
+        if (Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["g" /* hasIn */])('options', schema)) {
+            if (Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["g" /* hasIn */])('styles', schema.options)) {
                 toolbar += this.toolbarStyles(schema.options.styles);
             }
-            if (Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["g" /* hasIn */])('tags', schema.options)) {
+            if (Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["g" /* hasIn */])('tags', schema.options)) {
                 toolbar += this.toolbarTags(schema.options.tags);
             }
         }
         toolbar = toolbar.trim();
-        return !Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["j" /* isEmpty */])(toolbar) ? toolbar : false;
+        return !Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["j" /* isEmpty */])(toolbar) ? toolbar : false;
     };
     WysiwygHandler.toolbarStyles = function (styles) {
         var stylesValue = {};
@@ -2124,17 +2162,17 @@ var WysiwygHandler = (function () {
             },
         };
         if (typeof styles === 'string') {
-            styles = Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["d" /* equals */])(styles, WysiwygHandler.STYLES_ALL)
+            styles = Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["d" /* equals */])(styles, WysiwygHandler.STYLES_ALL)
                 ? Object.keys(groups)
                 : [];
         }
         styles.forEach(function (style) {
-            if (Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["g" /* hasIn */])(style, groups)) {
+            if (Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["g" /* hasIn */])(style, groups)) {
                 WysiwygHandler.addValue(stylesValue, style, Object.values(groups[style]));
             }
             else {
                 for (var group in groups) {
-                    if (Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["g" /* hasIn */])(style, groups[group])) {
+                    if (Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["g" /* hasIn */])(style, groups[group])) {
                         WysiwygHandler.addValue(stylesValue, group, [
                             groups[group][style],
                         ]);
@@ -2144,8 +2182,8 @@ var WysiwygHandler = (function () {
         });
         var result = '';
         for (var styleValue in stylesValue) {
-            if (!Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["k" /* isNil */])(stylesValue[styleValue])) {
-                result += Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["q" /* uniq */])(stylesValue[styleValue]).join(' ') + ' | ';
+            if (!Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["k" /* isNil */])(stylesValue[styleValue])) {
+                result += Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["q" /* uniq */])(stylesValue[styleValue]).join(' ') + ' | ';
             }
         }
         return result.replace(/(\s\|\s)$/g, '');
@@ -2162,7 +2200,7 @@ var WysiwygHandler = (function () {
             formats: {},
         };
         if (typeof tags === 'string') {
-            tags = Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["d" /* equals */])(tags, WysiwygHandler.TAGS_ALL)
+            tags = Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["d" /* equals */])(tags, WysiwygHandler.TAGS_ALL)
                 ? Object.keys(groups)
                 : [];
         }
@@ -2170,12 +2208,12 @@ var WysiwygHandler = (function () {
             tags = Object.keys(tags);
         }
         tags.forEach(function (style) {
-            if (Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["g" /* hasIn */])(style, groups)) {
+            if (Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["g" /* hasIn */])(style, groups)) {
                 WysiwygHandler.addValue(tagsValue, style, Object.values(groups[style]));
             }
             else {
                 for (var group in groups) {
-                    if (Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["g" /* hasIn */])(style, groups[group])) {
+                    if (Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["g" /* hasIn */])(style, groups[group])) {
                         WysiwygHandler.addValue(tagsValue, group, [
                             groups[group][style],
                         ]);
@@ -2185,15 +2223,15 @@ var WysiwygHandler = (function () {
         });
         var result = ' ';
         for (var tagValue in tagsValue) {
-            if (Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["d" /* equals */])(tagValue, 'buttons')) {
-                result += Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["q" /* uniq */])(tagsValue[tagValue]).join(' ');
+            if (Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["d" /* equals */])(tagValue, 'buttons')) {
+                result += Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["q" /* uniq */])(tagsValue[tagValue]).join(' ');
             }
         }
         return result;
     };
     WysiwygHandler.addValue = function (object, property, value) {
-        if (Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["g" /* hasIn */])(property, object)) {
-            object[property] = Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["p" /* union */])(object[property], value);
+        if (Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["g" /* hasIn */])(property, object)) {
+            object[property] = Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["p" /* union */])(object[property], value);
         }
         else {
             object[property] = value;
@@ -2211,8 +2249,8 @@ var WysiwygHandler = (function () {
     WysiwygHandler.initDatePicker = function (args) {
         __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(function () {
             'use strict';
-            var hasNode = Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["g" /* hasIn */])('node', args);
-            var hasElement = Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["g" /* hasIn */])('element', args);
+            var hasNode = Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["g" /* hasIn */])('node', args);
+            var hasElement = Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["g" /* hasIn */])('element', args);
             var element = hasNode
                 ? __WEBPACK_IMPORTED_MODULE_0_jquery___default()(args.node.getSection())
                 : hasElement
@@ -2222,17 +2260,19 @@ var WysiwygHandler = (function () {
                 var date = element.html();
                 element.html('<input type="text" value="' + date + '">');
                 var input_1 = element.children();
-                input_1.datepicker({
-                    format: 'dd-mm-yyyy',
-                });
+                input_1.datepicker({});
                 input_1.datepicker().on('hide', function () {
                     input_1.datepicker('destroy');
-                    element.html(input_1.val());
+                    var format = !Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["k" /* isNil */])(args.node.getSchema().options.format) ? args.node.getSchema().options.format : 'dd-mm-yyyy';
+                    if (element.prop('tagName') === 'TIME') {
+                        element.attr('datetime', input_1.val());
+                    }
+                    element.html(__WEBPACK_IMPORTED_MODULE_21_dateformat___default()(input_1.val(), format));
                     if (hasNode) {
                         args.service.save(args.node.getTarget(), element.html(), 'Change section date');
                         args.service.getFileStateValue().snapshot();
                     }
-                    else if (hasElement && Object(__WEBPACK_IMPORTED_MODULE_22_ramda__["g" /* hasIn */])('callback', args)) {
+                    else if (hasElement && Object(__WEBPACK_IMPORTED_MODULE_23_ramda__["g" /* hasIn */])('callback', args)) {
                         args.callback(input_1.val());
                     }
                 });
@@ -2247,8 +2287,7 @@ var WysiwygHandler = (function () {
      * This method get data in plain format from clipboard
      */
     WysiwygHandler.copyPlain = function (evt) {
-        var data = evt.clipboardData.getData('text/plain');
-        return data;
+        return evt.clipboardData.getData('text/plain');
     };
     /*
     * This method get the data in html format from the clipboard but if it is empty it try to get in plain format
@@ -2281,6 +2320,19 @@ var WysiwygHandler = (function () {
     return WysiwygHandler;
 }());
 
+__WEBPACK_IMPORTED_MODULE_21_dateformat___default.a.i18n = {
+    dayNames: [
+        'Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab',
+        'Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'
+    ],
+    monthNames: [
+        'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ],
+    timeNames: [
+        'a', 'p', 'am', 'pm', 'A', 'P', 'AM', 'PM'
+    ]
+};
 
 
 /***/ }),
@@ -2327,9 +2379,11 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_angular2_notifications__ = __webpack_require__("../../../../angular2-notifications/angular2-notifications.umd.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_angular2_notifications__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__models_configs_clipboardConfigs__ = __webpack_require__("../../../../../src/app/models/configs/clipboardConfigs.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__app_xedit__ = __webpack_require__("../../../../../src/app/xedit.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__app_models_configs_statesConfigs__ = __webpack_require__("../../../../../src/app/models/configs/statesConfigs.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__api__ = __webpack_require__("../../../../../src/app/api.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__core_mappers_router__ = __webpack_require__("../../../../../src/app/core/mappers/router.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__app_xedit__ = __webpack_require__("../../../../../src/app/xedit.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__app_models_configs_statesConfigs__ = __webpack_require__("../../../../../src/app/models/configs/statesConfigs.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2353,6 +2407,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var WysiwygViewComponent = (function () {
     function WysiwygViewComponent(_editorService, contextMenuService, _elementRef, _notification, cdr, http) {
         this._editorService = _editorService;
@@ -2362,13 +2418,13 @@ var WysiwygViewComponent = (function () {
         this.cdr = cdr;
         this.http = http;
         this.selectNode = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.contextMenuActions = [];
         this.enableHover = null;
         this.reload = false;
-        this.contextMenuActions = [];
     }
     /************************************** Life Cycle **************************************/
     WysiwygViewComponent.prototype.ngOnInit = function () {
-        this.stateConfigs = new __WEBPACK_IMPORTED_MODULE_12__app_models_configs_statesConfigs__["a" /* StateConfigs */]();
+        this.stateConfigs = new __WEBPACK_IMPORTED_MODULE_14__app_models_configs_statesConfigs__["a" /* StateConfigs */]();
         this._editorService.setLoading(true);
         this.config();
     };
@@ -2478,7 +2534,7 @@ var WysiwygViewComponent = (function () {
     };
     WysiwygViewComponent.prototype.addHttp = function (resource) {
         if (!(/^(f|ht)tps?:\/\//i).test(resource)) {
-            resource = "" + __WEBPACK_IMPORTED_MODULE_11__app_xedit__["a" /* Xedit */].getResourceUrl() + resource;
+            resource = __WEBPACK_IMPORTED_MODULE_12__core_mappers_router__["a" /* default */].configUrl(__WEBPACK_IMPORTED_MODULE_11__api__["a" /* Api */].getResourceUrl(), { id: resource });
         }
         return resource;
     };
@@ -2496,7 +2552,7 @@ var WysiwygViewComponent = (function () {
         this.currentNode = currentNode;
         if (!Object(__WEBPACK_IMPORTED_MODULE_2_ramda__["k" /* isNil */])(currentNode.getSchema())) {
             // Add selected class
-            var name_1 = __WEBPACK_IMPORTED_MODULE_3__models_node__["a" /* Node */].getSectionLang(this.currentNode.getSchema(), __WEBPACK_IMPORTED_MODULE_11__app_xedit__["a" /* Xedit */].getLang());
+            var name_1 = __WEBPACK_IMPORTED_MODULE_3__models_node__["a" /* Node */].getSectionLang(this.currentNode.getSchema(), __WEBPACK_IMPORTED_MODULE_13__app_xedit__["a" /* Xedit */].getLang());
             this.currentNode.getSection().setAttribute(__WEBPACK_IMPORTED_MODULE_4__models_schema_xedit_mapper__["a" /* XeditMapper */].ATTR_SELECTED, name_1);
             // Add selected class
             this.currentNode.getTarget().setAttribute(__WEBPACK_IMPORTED_MODULE_4__models_schema_xedit_mapper__["a" /* XeditMapper */].ATTR_WYSIWYG_SELECTED, this.currentNode.getTarget().nodeName);
@@ -2511,6 +2567,7 @@ var WysiwygViewComponent = (function () {
         var args = { node: currentNode, service: this._editorService, clipboardConfigs: clipboardConfigs, http: this.http };
         __WEBPACK_IMPORTED_MODULE_8__components_editor_views_wysiwyg_view_wysiwyg_handler__["a" /* WysiwygHandler */].executeHandler(sectionType, args);
     };
+    /************************************** MENU *****************************************/
     WysiwygViewComponent.prototype.onContextMenu = function ($event, item) {
         var _this = this;
         var node = this._editorService.parseToNode($event.target);
@@ -2578,10 +2635,10 @@ var WysiwygViewComponent = (function () {
                     __WEBPACK_IMPORTED_MODULE_5__models_dom__["a" /* DOM */].element(node.getSection())
                         .insertNode(template, sectionNode.getTarget().childNodes[sectionNode.getTarget().childNodes.length], true);
                     _this._editorService.addNodeToArea(node, __WEBPACK_IMPORTED_MODULE_7__utils_converters__["a" /* Converters */].html2json(template, false), true);
-                    _this._notification.info('Componente insertado', 'El componente ha sido pegado con éxito.', __WEBPACK_IMPORTED_MODULE_11__app_xedit__["a" /* Xedit */].NOTIFICATION_DEFAULT_SETTINGS);
+                    _this._notification.info('Componente insertado', 'El componente ha sido pegado con éxito.', __WEBPACK_IMPORTED_MODULE_13__app_xedit__["a" /* Xedit */].NOTIFICATION_DEFAULT_SETTINGS);
                 }
                 else {
-                    _this._notification.error('Estructura inválida', 'El componente pegado no es soportado.', __WEBPACK_IMPORTED_MODULE_11__app_xedit__["a" /* Xedit */].NOTIFICATION_DEFAULT_SETTINGS);
+                    _this._notification.error('Estructura inválida', 'El componente pegado no es soportado.', __WEBPACK_IMPORTED_MODULE_13__app_xedit__["a" /* Xedit */].NOTIFICATION_DEFAULT_SETTINGS);
                 }
             }, true));
         }
@@ -2614,7 +2671,7 @@ var WysiwygViewComponent = (function () {
             siblings: [],
             others: []
         };
-        actions.name = __WEBPACK_IMPORTED_MODULE_3__models_node__["a" /* Node */].getSectionLang(node.getSchema(), __WEBPACK_IMPORTED_MODULE_11__app_xedit__["a" /* Xedit */].getLang());
+        actions.name = __WEBPACK_IMPORTED_MODULE_3__models_node__["a" /* Node */].getSectionLang(node.getSchema(), __WEBPACK_IMPORTED_MODULE_13__app_xedit__["a" /* Xedit */].getLang());
         // Get childs
         if (Object(__WEBPACK_IMPORTED_MODULE_2_ramda__["g" /* hasIn */])('actions', node.getSchema()) && !Object(__WEBPACK_IMPORTED_MODULE_2_ramda__["k" /* isNil */])(node.getSchema().actions)) {
             if (Object(__WEBPACK_IMPORTED_MODULE_2_ramda__["g" /* hasIn */])('children', node.getSchema().actions)) {
@@ -2623,7 +2680,7 @@ var WysiwygViewComponent = (function () {
                     var schema = node.getSchemaNode()[child];
                     if (!Object(__WEBPACK_IMPORTED_MODULE_2_ramda__["k" /* isNil */])(schema)) {
                         actions.children.push({
-                            name: __WEBPACK_IMPORTED_MODULE_3__models_node__["a" /* Node */].getSectionLang(schema, __WEBPACK_IMPORTED_MODULE_11__app_xedit__["a" /* Xedit */].getLang()),
+                            name: __WEBPACK_IMPORTED_MODULE_3__models_node__["a" /* Node */].getSectionLang(schema, __WEBPACK_IMPORTED_MODULE_13__app_xedit__["a" /* Xedit */].getLang()),
                             template: __WEBPACK_IMPORTED_MODULE_3__models_node__["a" /* Node */].getSectionTemplate(schema)
                         });
                     }
@@ -2635,7 +2692,7 @@ var WysiwygViewComponent = (function () {
                     var schema = node.getSchemaNode()[sibling];
                     if (!Object(__WEBPACK_IMPORTED_MODULE_2_ramda__["k" /* isNil */])(schema)) {
                         actions.siblings.push({
-                            name: __WEBPACK_IMPORTED_MODULE_3__models_node__["a" /* Node */].getSectionLang(schema, __WEBPACK_IMPORTED_MODULE_11__app_xedit__["a" /* Xedit */].getLang()),
+                            name: __WEBPACK_IMPORTED_MODULE_3__models_node__["a" /* Node */].getSectionLang(schema, __WEBPACK_IMPORTED_MODULE_13__app_xedit__["a" /* Xedit */].getLang()),
                             template: __WEBPACK_IMPORTED_MODULE_3__models_node__["a" /* Node */].getSectionTemplate(schema)
                         });
                     }
@@ -2653,13 +2710,13 @@ var WysiwygViewComponent = (function () {
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"])
     ], WysiwygViewComponent.prototype, "xedit", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"])
-    ], WysiwygViewComponent.prototype, "selectNode", void 0);
-    __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('myContextMenu'),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ngx_contextmenu__["a" /* ContextMenuComponent */])
     ], WysiwygViewComponent.prototype, "basicMenu", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"])
+    ], WysiwygViewComponent.prototype, "selectNode", void 0);
     WysiwygViewComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-wysiwyg-view',
@@ -2668,7 +2725,7 @@ var WysiwygViewComponent = (function () {
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6__services_editor_service_editor_service__["a" /* EditorService */], __WEBPACK_IMPORTED_MODULE_1_ngx_contextmenu__["c" /* ContextMenuService */],
             __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"], __WEBPACK_IMPORTED_MODULE_9_angular2_notifications__["NotificationsService"], __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"],
-            __WEBPACK_IMPORTED_MODULE_13__angular_common_http__["a" /* HttpClient */]])
+            __WEBPACK_IMPORTED_MODULE_15__angular_common_http__["a" /* HttpClient */]])
     ], WysiwygViewComponent);
     return WysiwygViewComponent;
 }());
@@ -2680,7 +2737,7 @@ var WysiwygViewComponent = (function () {
 /***/ "../../../../../src/app/components/taskbar/properties-global-view/properties-global-view.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n    <header>Metadatos</header>\n    <main>\n        <ng-container *ngFor=\"let meta of metas\" [ngSwitch]=\"meta.type\">\n            <ng-container *ngSwitchCase=\"'string'\">\n                <app-multi-input [data]=\"createMetaObject(meta)\" (changeValue)=\"changeMetadata($event.new[meta.name], meta.name)\"></app-multi-input>\n            </ng-container>\n            <ng-container *ngSwitchDefault [ngSwitch]=\"meta.type\">\n                <strong>{{meta.name}}</strong> :\n                <app-listbox *ngSwitchCase=\"'enum'\" [placeholder]=\"meta.name\" [selected]=\"meta.value\" [options]=\"meta.options\" (changeValue)=\"changeMetadata($event, meta.name)\"></app-listbox>\n                <time *ngSwitchCase=\"'date'\" #date xe_section=\"date\" datetime=\"0000-00-00\" (click)=\"applyHandler($event, meta, this)\">{{ (meta.value === '') ? dateNow() : meta.value }}</time>\n                <p *ngSwitchCase=\"'image'\" (click)=\"applyHandler($event, meta, this)\" style=\"display: inline-block;\">\n                    <img style=\"max-height: 50px; min-height: 50px;\" src=\"{{ baseUrl }}{{ meta.value }}\" alt=\"select image\">\n                </p>\n                <ng-container *ngSwitchDefault>\n                    {{meta.value}}\n                </ng-container>\n                <br/>\n            </ng-container>\n        </ng-container>\n    </main>\n</div>\n<div>\n    <header>Estados</header>\n    <main>\n        <ng-container *ngFor=\"let value of states\">\n            <p (click)=\"restoreSnaptshot(value.key)\">{{ value.message }}</p>\n        </ng-container>\n    </main>\n</div>"
+module.exports = "<div>\n    <header>Metadatos</header>\n    <main>\n        <ng-container *ngFor=\"let meta of metas\" [ngSwitch]=\"meta.type\">\n            <ng-container *ngSwitchCase=\"'string'\">\n                <app-multi-input [data]=\"createMetaObject(meta)\" (changeValue)=\"changeMetadata($event.new[meta.name], meta.name)\"></app-multi-input>\n            </ng-container>\n            <ng-container *ngSwitchDefault [ngSwitch]=\"meta.type\">\n                <strong>{{ meta.name }}</strong> :\n                <app-listbox *ngSwitchCase=\"'enum'\" [placeholder]=\"meta.name\" [selected]=\"meta.value\" [options]=\"meta.options\" (changeValue)=\"changeMetadata($event, meta.name)\"></app-listbox>\n                <time *ngSwitchCase=\"'date'\" #date xe_section=\"date\" datetime=\"0000-00-00\" (click)=\"applyHandler($event, meta, this)\">{{ (meta.value === '') ? dateNow() : meta.value }}</time>\n                <p *ngSwitchCase=\"'image'\" (click)=\"applyHandler($event, meta, this)\" style=\"display: inline-block;\">\n                    <img style=\"max-height: 50px; min-height: 50px;\" src=\"{{ baseUrl }}{{ meta.value }}\" alt=\"select image\">\n                </p>\n                <ng-container *ngSwitchDefault>\n                    {{ meta.value }}\n                </ng-container>\n                <br/>\n            </ng-container>\n        </ng-container>\n    </main>\n</div>\n<div>\n    <header>Estados</header>\n    <main>\n        <ng-container *ngFor=\"let value of states\">\n            <p (click)=\"restoreSnaptshot(value.key)\">{{ value.message }}</p>\n        </ng-container>\n    </main>\n</div>"
 
 /***/ }),
 
@@ -2713,9 +2770,9 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_components_editor_views_wysiwyg_view_wysiwyg_handler__ = __webpack_require__("../../../../../src/app/components/editor/views/wysiwyg-view/wysiwyg-handler.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_dateformat__ = __webpack_require__("../../../../dateformat/lib/dateformat.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_dateformat___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_dateformat__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_api__ = __webpack_require__("../../../../../src/app/api.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_xedit__ = __webpack_require__("../../../../../src/app/xedit.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_mappers_router__ = __webpack_require__("../../../../../src/app/core/mappers/router.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_api__ = __webpack_require__("../../../../../src/app/api.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2742,7 +2799,7 @@ var PropertiesGlobalViewComponent = (function () {
         var _this = this;
         this.metas = [];
         this.states = [];
-        this.baseUrl = __WEBPACK_IMPORTED_MODULE_7__app_xedit__["a" /* Xedit */].getResourceUrl();
+        this.baseUrl = __WEBPACK_IMPORTED_MODULE_5__core_mappers_router__["a" /* default */].BASE_URL;
         this.suscribeFile = this._editorService.getFile().subscribe(function (file) {
             _this.metas = [];
             _this.file = file;
@@ -2769,7 +2826,7 @@ var PropertiesGlobalViewComponent = (function () {
         var metas = this.file.getMetas();
         for (var meta in metas) {
             if (Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["g" /* hasIn */])('name', metas[meta]) &&
-                metas[meta]['name'] == key &&
+                metas[meta]['name'] === key &&
                 Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["g" /* hasIn */])('value', metas[meta])) {
                 metas[meta]['value'] = value;
             }
@@ -2816,7 +2873,7 @@ var PropertiesGlobalViewComponent = (function () {
         window['treeModal']
             .openModal('modal-1', type)
             .then(function (selectedId) {
-            __WEBPACK_IMPORTED_MODULE_5__app_api__["a" /* Api */].getInfoNode(_this.http, selectedId, type, callback, null, null);
+            __WEBPACK_IMPORTED_MODULE_6__app_api__["a" /* Api */].getInfoNode(_this.http, selectedId, type, callback, null, null);
         })
             .catch(function (err) { return console.log(err); });
     };
@@ -2827,7 +2884,7 @@ var PropertiesGlobalViewComponent = (function () {
             styles: [__webpack_require__("../../../../../src/app/components/taskbar/properties-global-view/properties-global-view.component.scss")],
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_editor_service_editor_service__["a" /* EditorService */],
-            __WEBPACK_IMPORTED_MODULE_6__angular_common_http__["a" /* HttpClient */]])
+            __WEBPACK_IMPORTED_MODULE_7__angular_common_http__["a" /* HttpClient */]])
     ], PropertiesGlobalViewComponent);
     return PropertiesGlobalViewComponent;
 }());
@@ -2891,7 +2948,7 @@ var StateControllerComponent = (function () {
         this.updated.emit(this.configs);
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('configs'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", Array)
     ], StateControllerComponent.prototype, "configs", void 0);
     __decorate([
@@ -3064,23 +3121,6 @@ var TaskbarComponent = (function () {
         document.getElementById('open_html').value = '';
         document.getElementById('open_html').click();
     };
-    TaskbarComponent.prototype.onFileSelect = function (event) {
-        var _this = this;
-        var file = event.target.files[0];
-        if (file.type === 'application/json') {
-            var reader = new FileReader();
-            reader.readAsText(file, 'UTF-8');
-            reader.onload = function (fileReaderEvent) {
-                var json = JSON.parse(fileReaderEvent.target.result);
-                var nodes = json.response;
-                _this._editorService.createFile(nodes);
-            };
-            this._stateService.setAvailableViews(['wysiwyg', 'text']);
-            reader.onerror = function (evt) {
-                console.error('Error loading file');
-            };
-        }
-    };
     TaskbarComponent.prototype.toggleAttributes = function (event) {
         __WEBPACK_IMPORTED_MODULE_3__models_dom__["a" /* DOM */].element(event.target).toggleClass('selected');
         this.displayToggle = !this.displayToggle;
@@ -3148,6 +3188,200 @@ var TaskbarComponent = (function () {
 
 /***/ }),
 
+/***/ "../../../../../src/app/core/api.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mappers_router__ = __webpack_require__("../../../../../src/app/core/mappers/router.ts");
+
+var Api = (function () {
+    function Api() {
+    }
+    /****************** API METHODS ******************/
+    Api.request = function (http, endpoint, query_params, post_data, _headers, successCallback, errorCallback, extra, http_method) {
+        if (extra === void 0) { extra = {}; }
+        if (http_method === void 0) { http_method = 'get'; }
+        var _a = __WEBPACK_IMPORTED_MODULE_0__mappers_router__["a" /* default */].setToken(query_params, _headers), params = _a.params, headers = _a.headers;
+        var url = __WEBPACK_IMPORTED_MODULE_0__mappers_router__["a" /* default */].configUrl(endpoint, params);
+        var func = http.get(url, { headers: headers });
+        if (http_method === 'post') {
+            func = http.post(url, JSON.stringify(post_data), { headers: headers });
+        }
+        // TODO PUT, DELETE....
+        return func.subscribe(function (result) {
+            successCallback(result, extra);
+        }, function (error) {
+            errorCallback(extra);
+        });
+    };
+    return Api;
+}());
+/* harmony default export */ __webpack_exports__["a"] = (Api);
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/core/mappers/router.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__xedit__ = __webpack_require__("../../../../../src/app/core/mappers/xedit.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ramda__ = __webpack_require__("../../../../ramda/es/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_query_string__ = __webpack_require__("../../../../query-string/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_query_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_query_string__);
+
+
+
+var Router = (function () {
+    function Router() {
+    }
+    Router.getRouter = function () {
+        return !Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["k" /* isNil */])(window[__WEBPACK_IMPORTED_MODULE_0__xedit__["a" /* Xedit */].BASE]) && Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["g" /* hasIn */])('router', window[__WEBPACK_IMPORTED_MODULE_0__xedit__["a" /* Xedit */].BASE]) ?
+            window[__WEBPACK_IMPORTED_MODULE_0__xedit__["a" /* Xedit */].BASE].router : null;
+    };
+    Router.getRouterProperty = function (prop, def) {
+        if (def === void 0) { def = null; }
+        var router = Router.getRouter();
+        if (!Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["k" /* isNil */])(router)) {
+            def = Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["g" /* hasIn */])(prop, router) ? router[prop] : null;
+        }
+        return def;
+    };
+    Router.setToken = function (params, headers) {
+        var token = Router.getRouterProperty(Router.TOKEN);
+        if (!Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["k" /* isNil */])(token)) {
+            if (token.type === 'url') {
+                params[token.field] = token.value;
+            }
+            else if (token.type === 'bearer') {
+                headers = headers.set('Authorization', "Bearer " + token.value);
+            }
+            else if (token.type === 'basic') {
+                headers = headers.set('Authorization', "Basic " + token.value);
+            }
+        }
+        return { params: params, headers: headers };
+    };
+    Router.configUrl = function (endpoint, _params) {
+        if (_params === void 0) { _params = {}; }
+        var params = Object.assign({}, _params);
+        var info = {};
+        if (!(/^(f|ht)tps?:\/\//i).test(endpoint)) {
+            info = this.get(endpoint);
+            endpoint = Router.getRouterProperty(Router.BASE_URL, '') + "/" + info['path'];
+        }
+        // Added query params
+        var match;
+        var path = endpoint;
+        while ((match = (/\{([^{}]*)}/g).exec(path)) !== null) {
+            var val = null;
+            if (Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["g" /* hasIn */])(match[1], params)) {
+                val = params[match[1]];
+                delete params[match[1]];
+            }
+            else {
+                val = Router.getExtraParam(match[1]);
+            }
+            if (val != null) {
+                endpoint = endpoint.replace(match[0], val);
+            }
+            path = path.replace(match[0], '');
+        }
+        // Extra params
+        if ((Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["g" /* hasIn */])('params', info))) {
+            for (var property in info['params']) {
+                var val = info['params'][property];
+                match = (/^\{(.*)}$/g).exec(val);
+                if (match != null) {
+                    var param = Router.getExtraParam(match[1]);
+                    if (!Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["k" /* isNil */])(param)) {
+                        val = param;
+                    }
+                }
+                if (!Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["g" /* hasIn */])(property, params)) {
+                    params[property] = val;
+                }
+                // filters.push(`${property}=${val}`);
+            }
+        }
+        var query = Object.keys(params).length > 0 ? "?" + __WEBPACK_IMPORTED_MODULE_2_query_string___default.a.stringify(params) : '';
+        return "" + endpoint + query;
+    };
+    Router.get = function (name) {
+        var endpoint = null;
+        var path = name.split('.');
+        for (var key in path) {
+            endpoint = Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["k" /* isNil */])(endpoint) ? Router.getRouterProperty(Router.ENDPOINTS)[path[key]] : endpoint[path[key]];
+        }
+        return endpoint;
+    };
+    Router.getExtraParam = function (param, def) {
+        if (def === void 0) { def = null; }
+        var params = Router.getRouterProperty(Router.EXTRA_PARAMS);
+        if (!Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["k" /* isNil */])(params) && Object(__WEBPACK_IMPORTED_MODULE_1_ramda__["g" /* hasIn */])(param, params)) {
+            def = params[param];
+        }
+        return def;
+    };
+    Router.ROUTER = 'router';
+    Router.TOKEN = 'token';
+    Router.BASE_URL = 'baseUrl';
+    Router.ENDPOINTS = 'endpoints';
+    Router.EXTRA_PARAMS = 'attrs';
+    return Router;
+}());
+/* harmony default export */ __webpack_exports__["a"] = (Router);
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/core/mappers/xedit.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Xedit; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ramda__ = __webpack_require__("../../../../ramda/es/index.js");
+
+var Xedit = (function () {
+    function Xedit() {
+    }
+    // ************************************** Getters and setters **************************************/
+    Xedit.getXedit = function () {
+        return Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])(Xedit.BASE, window) ? window[Xedit.BASE] : null;
+    };
+    Xedit.getDocument = function () {
+        var xedit = Xedit.getXedit();
+        var res = null;
+        if (!Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(xedit)) {
+            res = Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('document', xedit) ? xedit.document : null;
+        }
+        return res;
+    };
+    Xedit.getData = function (property) {
+        if (property === void 0) { property = null; }
+        var xedit = Xedit.getXedit();
+        var res = null;
+        if (!Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(xedit)) {
+            res = Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('data', xedit) ? xedit['data'][property] : xedit['data'];
+        }
+        return res;
+    };
+    Xedit.BASE = '$xedit';
+    Xedit.TOKEN = 'token';
+    Xedit.API_URL = 'apiUrl';
+    Xedit.NOTIFICATION_DEFAULT_SETTINGS = {
+        timeOut: 3000,
+        showProgressBar: true,
+        pauseOnHover: true,
+        clickToClose: true
+    };
+    return Xedit;
+}());
+
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/elements/blocks/acordion/acordion.component.html":
 /***/ (function(module, exports) {
 
@@ -3199,11 +3433,11 @@ var AcordionComponent = (function () {
         this.isOpen = !this.isOpen;
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('title'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], AcordionComponent.prototype, "title", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('className'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], AcordionComponent.prototype, "className", void 0);
     AcordionComponent = __decorate([
@@ -3273,12 +3507,12 @@ var TreeModalComponent = (function () {
         this.ms = ms;
         this.close = false;
     }
-    TreeModalComponent.prototype.openModal = function (id, type, path) {
+    TreeModalComponent.prototype.openModal = function (id, type, p) {
         var _this = this;
-        if (path === void 0) { path = []; }
+        if (p === void 0) { p = []; }
         this.close = false;
         this.selectedId = null;
-        this.path = path;
+        this.path = p;
         this.type = type;
         this.modal.openModal(id);
         this.tree.resetTreeModel();
@@ -3294,7 +3528,7 @@ var TreeModalComponent = (function () {
                     else if (treeModal.close && Object(__WEBPACK_IMPORTED_MODULE_2_ramda__["k" /* isNil */])(treeModal.selectedId)) {
                         window.clearInterval(loop);
                         _this.modal.closeModal(id);
-                        reject("Closed without selection");
+                        reject('Closed without selection');
                     }
                 }
                 catch (e) {
@@ -3314,11 +3548,11 @@ var TreeModalComponent = (function () {
         window['treeModal'] = this;
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])("modal"),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('modal'),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_angular_5_popup__["a" /* ModalComponent */])
     ], TreeModalComponent.prototype, "modal", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])("tree"),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('tree'),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_3__elements_blocks_tree_tree_component__["a" /* TreeComponent */])
     ], TreeModalComponent.prototype, "tree", void 0);
     TreeModalComponent = __decorate([
@@ -3407,42 +3641,43 @@ var TreeComponent = (function () {
                 rightMenu: false
             },
             loadChildren: function (callback) {
-                _this.requestChildren("1", callback);
+                _this.requestChildren('1', callback);
             }
         };
-        //TODO LOAD PATH TREE
+        // TODO LOAD PATH TREE
     };
     TreeComponent.prototype.processChildren = function (nodes) {
         var _this = this;
         var children = [];
         var _loop_1 = function (nodeId) {
-            var obj = {
-                id: nodeId,
-                value: nodes[nodeId]['name']
-            };
-            if (nodes[nodeId]['type'] == 'folder') {
-                obj['loadChildren'] = function (callback) {
-                    _this.requestChildren(nodeId, callback);
+            if (!Object(__WEBPACK_IMPORTED_MODULE_2_ramda__["k" /* isNil */])(nodeId)) {
+                var obj = {
+                    id: nodeId,
+                    value: nodes[nodeId]['name']
                 };
+                if (nodes[nodeId]['type'] === 'folder') {
+                    obj['loadChildren'] = function (callback) {
+                        _this.requestChildren(nodeId, callback);
+                    };
+                }
+                else {
+                    obj['settings'] = {
+                        rightMenu: true,
+                        menuItems: [
+                            {
+                                name: 'Seleccionar', cssClass: '', action: __WEBPACK_IMPORTED_MODULE_1_ng2_tree__["NodeMenuItemAction"].Custom
+                            }
+                        ]
+                    };
+                }
+                children.push(obj);
             }
-            else {
-                obj['settings'] = {
-                    rightMenu: true,
-                    menuItems: [
-                        {
-                            name: 'Seleccionar', cssClass: '', action: __WEBPACK_IMPORTED_MODULE_1_ng2_tree__["NodeMenuItemAction"].Custom
-                        }
-                    ]
-                };
-            }
-            children.push(obj);
         };
         for (var nodeId in nodes) {
             _loop_1(nodeId);
         }
-        ;
-        if (children.length == 0) {
-            children.push({ value: "No hay elementos disponibles..." });
+        if (children.length === 0) {
+            children.push({ value: 'No hay elementos disponibles...' });
         }
         return children;
     };
@@ -3479,11 +3714,11 @@ var TreeComponent = (function () {
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"])
     ], TreeComponent.prototype, "selected", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('type'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", Object)
     ], TreeComponent.prototype, "type", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('path'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", Object)
     ], TreeComponent.prototype, "path", void 0);
     TreeComponent = __decorate([
@@ -3555,15 +3790,15 @@ var ButtonComponent = (function () {
         }
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])('text'),
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], ButtonComponent.prototype, "text", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])('icon'),
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], ButtonComponent.prototype, "icon", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])('click'),
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])(),
         __metadata("design:type", Function)
     ], ButtonComponent.prototype, "click", void 0);
     ButtonComponent = __decorate([
@@ -3639,15 +3874,15 @@ var CheckboxComponent = (function () {
         this.changeValue.emit(this.checked);
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('placeholder'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], CheckboxComponent.prototype, "placeholder", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('name'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], CheckboxComponent.prototype, "name", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('checked'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", Boolean)
     ], CheckboxComponent.prototype, "checked", void 0);
     __decorate([
@@ -3733,15 +3968,15 @@ var InputAcordionComponent = (function () {
         this.changeValue.emit(data);
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('title'),
-        __metadata("design:type", String)
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
     ], InputAcordionComponent.prototype, "title", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('actionText'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], InputAcordionComponent.prototype, "actionText", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('values'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", Array)
     ], InputAcordionComponent.prototype, "values", void 0);
     __decorate([
@@ -3766,7 +4001,7 @@ var InputAcordionComponent = (function () {
 /***/ "../../../../../src/app/elements/forms/listbox/listbox.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<select name=\"\" (change)=\"changeValues($event)\">\n    <ng-container *ngFor=\"let key of options | keys\">\n        <option [value]=\"key\" [selected]=\"key == selected\">{{options[key]}}</option>\n    </ng-container>\n</select>"
+module.exports = "<select name=\"\" (change)=\"changeValues($event)\">\n    <ng-container *ngFor=\"let key of options | keys\">\n        <option [value]=\"key\" [selected]=\"key == selected\">{{ options[key] }}</option>\n    </ng-container>\n</select>"
 
 /***/ }),
 
@@ -3819,15 +4054,15 @@ var ListboxComponent = (function () {
         this.changeValue.emit(this.selected);
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('placeholder'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], ListboxComponent.prototype, "placeholder", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('options'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], ListboxComponent.prototype, "options", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('selected'),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], ListboxComponent.prototype, "selected", void 0);
     __decorate([
@@ -3927,7 +4162,6 @@ var MultiInputAcordionComponent = (function () {
             var valuesClone = Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["a" /* clone */])(this._values);
             this._values = {};
             for (var key in valuesClone) {
-                var json = {};
                 if (oldKey !== key) {
                     this._values[key] = valuesClone[key].replace(/;$/, '');
                 }
@@ -3951,15 +4185,15 @@ var MultiInputAcordionComponent = (function () {
         this.changeValue.emit(data);
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])('title'),
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], MultiInputAcordionComponent.prototype, "title", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])('actionText'),
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], MultiInputAcordionComponent.prototype, "actionText", void 0);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])('values'),
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])(),
         __metadata("design:type", Array)
     ], MultiInputAcordionComponent.prototype, "values", void 0);
     __decorate([
@@ -4071,12 +4305,12 @@ var MultiInputComponent = (function () {
         this.changeValue.emit(json);
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])('data'),
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])(),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], MultiInputComponent.prototype, "data", null);
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])('editable'),
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"])(),
         __metadata("design:type", Boolean)
     ], MultiInputComponent.prototype, "editable", void 0);
     __decorate([
@@ -4239,13 +4473,13 @@ var Configs = (function () {
         });
         return __WEBPACK_IMPORTED_MODULE_0_localforage__;
     };
-    Configs.save = function (data, group) {
-        if (group === void 0) { group = 'configs'; }
-        return this.init().setItem(group, data, this.callback);
+    Configs.save = function (data, gr) {
+        if (gr === void 0) { gr = 'configs'; }
+        return this.init().setItem(gr, data, this.callback);
     };
-    Configs.get = function (group) {
-        if (group === void 0) { group = 'configs'; }
-        return this.init().getItem(group, this.callback);
+    Configs.get = function (gr) {
+        if (gr === void 0) { gr = 'configs'; }
+        return this.init().getItem(gr, this.callback);
     };
     Configs.callback = function (error, value) {
         if (error) {
@@ -4947,6 +5181,10 @@ var History = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_schema_xedit_mapper__ = __webpack_require__("../../../../../src/app/models/schema/xedit-mapper.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_converters__ = __webpack_require__("../../../../../src/utils/converters.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__xedit__ = __webpack_require__("../../../../../src/app/xedit.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api__ = __webpack_require__("../../../../../src/app/api.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_core_mappers_router__ = __webpack_require__("../../../../../src/app/core/mappers/router.ts");
+
+
 
 
 
@@ -5016,7 +5254,7 @@ var Node = (function () {
     Node.prototype.setAttribute = function (name, value) {
         if (name === __WEBPACK_IMPORTED_MODULE_1__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_LINK && this.getHtmlTag() === 'IMG ') {
             this.attributes[name] = value;
-            this.attributes['src'] = __WEBPACK_IMPORTED_MODULE_3__xedit__["a" /* Xedit */].getResourceUrl() + "/" + value;
+            this.attributes['src'] = __WEBPACK_IMPORTED_MODULE_5__app_core_mappers_router__["a" /* default */].configUrl(__WEBPACK_IMPORTED_MODULE_4__api__["a" /* Api */].getResourceUrl(), { id: value });
         }
         else if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["b" /* contains */])(name, this.getAvailableAttributes())) {
             this.attributes[name] = value;
@@ -5769,32 +6007,18 @@ var StateService = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Xedit; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ramda__ = __webpack_require__("../../../../ramda/es/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_mappers_xedit__ = __webpack_require__("../../../../../src/app/core/mappers/xedit.ts");
+
 
 var Xedit = (function () {
     function Xedit() {
     }
     // ************************************** Getters and setters **************************************/
     Xedit.getConf = function (conf, value) {
-        return Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])(conf, Xedit.getBase()) ? Xedit.getBase()[conf] :
-            (!Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(value) ? value : undefined);
+        return Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])(conf, __WEBPACK_IMPORTED_MODULE_1__core_mappers_xedit__["a" /* Xedit */].getXedit()) ? __WEBPACK_IMPORTED_MODULE_1__core_mappers_xedit__["a" /* Xedit */].getXedit()[conf] : (!Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(value) ? value : undefined);
     };
     Xedit.setConf = function (conf, value) {
-        return Xedit.getBase()[conf] = value;
-    };
-    Xedit.setToken = function (token) {
-        return Xedit.setConf(Xedit.TOKEN, token);
-    };
-    Xedit.getToken = function () {
-        return Xedit.getConf(Xedit.TOKEN);
-    };
-    Xedit.setApiUrl = function (url) {
-        return Xedit.setConf(Xedit.API_URL, url);
-    };
-    Xedit.getRouterMapper = function () {
-        return Xedit.getConf(Xedit.ROUTER_MAPPER);
-    };
-    Xedit.getApiUrl = function () {
-        return Xedit.getConf(Xedit.API_URL);
+        return __WEBPACK_IMPORTED_MODULE_1__core_mappers_xedit__["a" /* Xedit */].getXedit()[conf] = value;
     };
     Xedit.setLang = function (lang) {
         return Xedit.setConf(Xedit.LANG, lang);
@@ -5802,51 +6026,8 @@ var Xedit = (function () {
     Xedit.getLang = function () {
         return Xedit.getConf(Xedit.LANG, 'es');
     };
-    Xedit.getSetUrl = function () {
-        var routerMapper = Xedit.getRouterMapper();
-        var setUrl = '';
-        if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('set', routerMapper['routes'])) {
-            setUrl = routerMapper['routes']['set'];
-        }
-        return Xedit.generateActionUrl(setUrl);
-    };
-    Xedit.getResourceUrl = function () {
-        var routerMapper = Xedit.getRouterMapper();
-        var resourceUrl = '';
-        if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('resource', routerMapper['routes'])) {
-            resourceUrl = routerMapper['routes']['resource'];
-        }
-        return Xedit.generateActionUrl(resourceUrl) + "&id=";
-    };
-    Xedit.getTreeUrl = function () {
-        var routerMapper = Xedit.getRouterMapper();
-        var treeInfo = '';
-        if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('treeInfo', routerMapper['routes'])) {
-            treeInfo = routerMapper['routes']['treeInfo'];
-        }
-        return Xedit.generateActionUrl(treeInfo);
-    };
-    Xedit.getInfoNodeUrl = function () {
-        var routerMapper = Xedit.getRouterMapper();
-        var infoNode = '';
-        if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('infonode', routerMapper['routes'])) {
-            infoNode = routerMapper['routes']['infonode'];
-        }
-        return Xedit.generateActionUrl(infoNode);
-    };
     Xedit.getSchemas = function () {
         return Xedit.getConf(Xedit.SCHEMAS);
-    };
-    // ************************************** Private Methods **************************************/
-    Xedit.getBase = function () {
-        var xedit = window[Xedit.BASE];
-        if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(xedit)) {
-            xedit = window[Xedit.BASE] = {};
-        }
-        return xedit;
-    };
-    Xedit.generateActionUrl = function (action) {
-        return Xedit.getApiUrl() + "?" + action + "&token=" + Xedit.getToken();
     };
     Xedit.BASE = '$xedit';
     Xedit.TOKEN = 'token';
@@ -5998,12 +6179,14 @@ module.exports = "data:font/woff2;base64,d09GMgABAAAAAAsIAA0AAAAAEwgAAAq2AAEAAAA
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ramda__ = __webpack_require__("../../../../ramda/es/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular2_uuid__ = __webpack_require__("../../../../angular2-uuid/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular2_uuid___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_angular2_uuid__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_xedit__ = __webpack_require__("../../../../../src/app/xedit.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_schema_xedit_mapper__ = __webpack_require__("../../../../../src/app/models/schema/xedit-mapper.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_htmlparser__ = __webpack_require__("../../../../../src/utils/htmlparser.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_htmlparser___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__utils_htmlparser__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_util__ = __webpack_require__("../../../../util/util.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_util___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_util__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_schema_xedit_mapper__ = __webpack_require__("../../../../../src/app/models/schema/xedit-mapper.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_htmlparser__ = __webpack_require__("../../../../../src/utils/htmlparser.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_htmlparser___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__utils_htmlparser__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_util__ = __webpack_require__("../../../../util/util.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_util___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_util__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_api__ = __webpack_require__("../../../../../src/app/api.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_core_mappers_router__ = __webpack_require__("../../../../../src/app/core/mappers/router.ts");
+
 
 
 
@@ -6042,7 +6225,7 @@ var Converters = (function () {
             node: 'root',
             child: {},
         };
-        Object(__WEBPACK_IMPORTED_MODULE_4__utils_htmlparser__["HTMLParser"])(html, {
+        Object(__WEBPACK_IMPORTED_MODULE_3__utils_htmlparser__["HTMLParser"])(html, {
             start: function (tag, uuid, attrs, unary) {
                 // node for this element
                 var node = {
@@ -6150,7 +6333,7 @@ var Converters = (function () {
      * @return true if the attribute is valid, otherwise the attribute should be filter
      */
     Converters.filter = function (attr, attrs) {
-        return (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["b" /* contains */])(attr, __WEBPACK_IMPORTED_MODULE_3__models_schema_xedit_mapper__["a" /* XeditMapper */].requiredXeditAttributes) ||
+        return (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["b" /* contains */])(attr, __WEBPACK_IMPORTED_MODULE_2__models_schema_xedit_mapper__["a" /* XeditMapper */].requiredXeditAttributes) ||
             (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(attr.match('xe_')) && Converters.filterAttribute(attr, attrs))) ?
             true : false;
     };
@@ -6162,14 +6345,14 @@ var Converters = (function () {
      * @return true if the attribute is valid, otherwise the attribute should be filter
      */
     Converters.filterAttribute = function (attr, attrs) {
-        attrs = Object(__WEBPACK_IMPORTED_MODULE_5_util__["isArray"])(attrs) ? attrs : Object.keys(attrs);
+        attrs = Object(__WEBPACK_IMPORTED_MODULE_4_util__["isArray"])(attrs) ? attrs : Object.keys(attrs);
         var xeditAttribute = attrs.reduce(function (acc, value) {
             var val = (typeof value === 'string') ? value : value.name;
-            return Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["b" /* contains */])(val, __WEBPACK_IMPORTED_MODULE_3__models_schema_xedit_mapper__["a" /* XeditMapper */].requiredXeditAttributes) ? val : acc;
+            return Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["b" /* contains */])(val, __WEBPACK_IMPORTED_MODULE_2__models_schema_xedit_mapper__["a" /* XeditMapper */].requiredXeditAttributes) ? val : acc;
         }, null);
-        var settings = !Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(xeditAttribute) && Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])(xeditAttribute, __WEBPACK_IMPORTED_MODULE_3__models_schema_xedit_mapper__["a" /* XeditMapper */].ATTRIBUTES) &&
-            Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('filter_attributes', __WEBPACK_IMPORTED_MODULE_3__models_schema_xedit_mapper__["a" /* XeditMapper */].ATTRIBUTES[xeditAttribute]) ?
-            __WEBPACK_IMPORTED_MODULE_3__models_schema_xedit_mapper__["a" /* XeditMapper */].ATTRIBUTES[xeditAttribute]['filter_attributes'] : [];
+        var settings = !Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["k" /* isNil */])(xeditAttribute) && Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])(xeditAttribute, __WEBPACK_IMPORTED_MODULE_2__models_schema_xedit_mapper__["a" /* XeditMapper */].ATTRIBUTES) &&
+            Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])('filter_attributes', __WEBPACK_IMPORTED_MODULE_2__models_schema_xedit_mapper__["a" /* XeditMapper */].ATTRIBUTES[xeditAttribute]) ?
+            __WEBPACK_IMPORTED_MODULE_2__models_schema_xedit_mapper__["a" /* XeditMapper */].ATTRIBUTES[xeditAttribute]['filter_attributes'] : [];
         return !Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["b" /* contains */])(attr, settings);
     };
     /**
@@ -6207,13 +6390,13 @@ var Converters = (function () {
                 attr = " " + attr;
             }
             if (!enableHover) {
-                attr += __WEBPACK_IMPORTED_MODULE_3__models_schema_xedit_mapper__["a" /* XeditMapper */].ATTR_HOVER + "=\"false\"";
+                attr += __WEBPACK_IMPORTED_MODULE_2__models_schema_xedit_mapper__["a" /* XeditMapper */].ATTR_HOVER + "=\"false\"";
             }
         }
         if (json.node === 'element') {
             var tag = json.tag;
             var uuid = resetIds ? __WEBPACK_IMPORTED_MODULE_1_angular2_uuid__["UUID"].UUID() : json.uuid;
-            uuid = showIds ? " " + __WEBPACK_IMPORTED_MODULE_3__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_UUID + " = \"" + uuid + "\"" : '';
+            uuid = showIds ? " " + __WEBPACK_IMPORTED_MODULE_2__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_UUID + " = \"" + uuid + "\"" : '';
             if (empty.indexOf(tag) > -1) {
                 // empty element
                 return "<" + json.tag + " " + uuid + " " + attr + "/>";
@@ -6236,12 +6419,12 @@ var Converters = (function () {
     Converters.parseAttributes = function (key, value, processXedit, tag) {
         if (tag === void 0) { tag = 'a'; }
         var extraData = '';
-        var linkType = (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])(tag, __WEBPACK_IMPORTED_MODULE_3__models_schema_xedit_mapper__["a" /* XeditMapper */].LINK_TYPES)) ? __WEBPACK_IMPORTED_MODULE_3__models_schema_xedit_mapper__["a" /* XeditMapper */].LINK_TYPES[tag] : 'href';
-        if (processXedit && Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["b" /* contains */])(key, __WEBPACK_IMPORTED_MODULE_3__models_schema_xedit_mapper__["a" /* XeditMapper */].requiredXeditAttributes)) {
-            if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["d" /* equals */])(key, __WEBPACK_IMPORTED_MODULE_3__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_LINK)) {
+        var linkType = (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["g" /* hasIn */])(tag, __WEBPACK_IMPORTED_MODULE_2__models_schema_xedit_mapper__["a" /* XeditMapper */].LINK_TYPES)) ? __WEBPACK_IMPORTED_MODULE_2__models_schema_xedit_mapper__["a" /* XeditMapper */].LINK_TYPES[tag] : 'href';
+        if (processXedit && Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["b" /* contains */])(key, __WEBPACK_IMPORTED_MODULE_2__models_schema_xedit_mapper__["a" /* XeditMapper */].requiredXeditAttributes)) {
+            if (Object(__WEBPACK_IMPORTED_MODULE_0_ramda__["d" /* equals */])(key, __WEBPACK_IMPORTED_MODULE_2__models_schema_xedit_mapper__["a" /* XeditMapper */].TAG_LINK)) {
                 extraData = value;
                 if (!(/^(f|ht)tps?:\/\//i).test(extraData)) {
-                    extraData = "" + __WEBPACK_IMPORTED_MODULE_2__app_xedit__["a" /* Xedit */].getResourceUrl() + extraData;
+                    extraData = __WEBPACK_IMPORTED_MODULE_6__app_core_mappers_router__["a" /* default */].configUrl(__WEBPACK_IMPORTED_MODULE_5__app_api__["a" /* Api */].getResourceUrl(), { id: value });
                 }
                 extraData = linkType + "='" + extraData + "'";
             }
