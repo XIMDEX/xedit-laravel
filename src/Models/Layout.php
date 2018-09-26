@@ -10,6 +10,16 @@ use Xedit\Base\Interfaces\Models\IXeditLayout;
 class Layout extends Xedit implements IXeditLayout
 {
 
+    public function getTitleAttribute()
+    {
+        $result = $this->attributes['title'];
+        if (\Lang::has("xedit.layout.{$result}")) {
+            $result = __("xedit.layout.{$result}");
+        }
+
+        return $result;
+    }
+
     public function getId()
     {
         return $this->id;
