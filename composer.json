@@ -9,7 +9,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "ximdex/xedit-base": "*"
+        "ximdex/xedit-base": "dev-master"
     },
     "autoload": {
         "psr-4": {
