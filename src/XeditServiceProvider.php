@@ -27,6 +27,11 @@ class XeditServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/resources/xedit' => public_path('vendor/xedit'),
         ], 'xedit');
+
+        $this->publishes([
+            __DIR__ . '/resources/lang/xedit.php' => resource_path('lang/en/xedit.php'),
+            __DIR__ . '/resources/lang/xedit.php' => resource_path('lang/es/xedit.php'),
+        ], 'langs');
     }
 
     /**
