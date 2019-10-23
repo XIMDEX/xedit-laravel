@@ -945,11 +945,9 @@ var EditorComponent = /** @class */ (function () {
         if (!Object(ramda__WEBPACK_IMPORTED_MODULE_1__["isNil"])(uuid)) {
             var element = this._elementRef.nativeElement.querySelector("[" + _models_schema_xedit_mapper__WEBPACK_IMPORTED_MODULE_8__["XeditMapper"].TAG_UUID + "='" + uuid + "']");
             if (!Object(ramda__WEBPACK_IMPORTED_MODULE_1__["isNil"])(element)) {
-                // node = this._editorService.parseToNode(element);
                 node = this.nodeFactoryService.createFromElement(element);
             }
         }
-        // this._editorService.setCurrentNode(node);
         this.nodeService.set(node);
     };
     EditorComponent.prototype.setCurrentToolbar = function (toolbar) {
@@ -1497,9 +1495,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var EditorViewComponent = /** @class */ (function () {
-    function EditorViewComponent(_editorService, _moduleService, 
-    // private _damService: DamService,
-    nodeService, http) {
+    function EditorViewComponent(_editorService, _moduleService, nodeService, http) {
         this._editorService = _editorService;
         this._moduleService = _moduleService;
         this.nodeService = nodeService;
@@ -1516,7 +1512,6 @@ var EditorViewComponent = /** @class */ (function () {
     EditorViewComponent.prototype.ngOnDestroy = function () {
         this.subscribeFile.unsubscribe();
         this.subscribeCN.unsubscribe();
-        // this._editorService.setCurrentNode(null);
         this.nodeService.set(null);
         this._editorService.setCurrentNodeModify(null);
     };
@@ -6257,7 +6252,6 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
-// import { DamService } from '@app/services/dam-service/dam.service';
 
 
 
@@ -6553,7 +6547,6 @@ var ImageComponent = /** @class */ (function (_super) {
     ImageComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_4__["Component"])({
             selector: 'app-image',
-            // templateUrl: './image.component.html',
             template: '<ng-content></ng-content>',
             styles: [__webpack_require__(/*! ./image.component.scss */ "./src/app/elements/xedit/image/image.component.scss")]
         }),
@@ -6794,7 +6787,6 @@ var TinyMCEComponent = /** @class */ (function (_super) {
     TinyMCEComponent.prototype.ngOnDestroy = function () {
         this.subscribeCNM.unsubscribe();
         this.nodeService.set(null);
-        // this.editorService.setCurrentNode(null);
     };
     TinyMCEComponent.prototype.selectedNode = function (_a) {
         var event = _a.event;
@@ -6922,22 +6914,6 @@ var TinyMCEComponent = /** @class */ (function (_super) {
                     }
                 });
             }
-            // dam_callback: type => {
-            //     const modal = this.ngxModal.getModal('imageModal');
-            //     modal.removeData();
-            //     modal.setData({
-            //         fields: this.getImageAttrs()
-            //         // settings: {
-            //         //     image_size: this.containerSize(),
-            //         //     crop_data: this.cropData()
-            //         // },
-            //         // save: this.changeImage.bind(this)
-            //     });
-            //     modal.open();
-            //     // this.damService.setOpen({
-            //     //     type: type
-            //     // });
-            // }
         };
         if (Object(ramda__WEBPACK_IMPORTED_MODULE_6__["hasIn"])('options', this.content.settings)) {
             var _a = this.content.settings.options, _b = _a.colors, colors = _b === void 0 ? {} : _b, _c = _a.fonts, fonts = _c === void 0 ? [] : _c, _d = _a.fontsize, fontsize = _d === void 0 ? [] : _d;
@@ -8898,7 +8874,13 @@ var EditorService = /** @class */ (function () {
             var editContent = Object(ramda__WEBPACK_IMPORTED_MODULE_2__["reduce"])(function (acc, value) {
                 return acc.child[value];
             }, root.content, uuidPath);
-            editContent.child = _utils_converters__WEBPACK_IMPORTED_MODULE_6__["Converters"].html2json(content, false);
+            var newContent = _utils_converters__WEBPACK_IMPORTED_MODULE_6__["Converters"].html2json(content, false);
+            if (Object(ramda__WEBPACK_IMPORTED_MODULE_2__["hasIn"])(editContent.uuid, newContent) &&
+                Object(ramda__WEBPACK_IMPORTED_MODULE_2__["hasIn"])('uuid', newContent[editContent.uuid]) &&
+                editContent.uuid === newContent[editContent.uuid].uuid) {
+                newContent = newContent[editContent.uuid].child;
+            }
+            editContent.child = newContent;
         }
         // Save new state
         var newFile = this.newStateFile(fileContent, message);
